@@ -20,7 +20,7 @@ public class Config {
 	public static final int PLANE_SPEED = 5;
 
 	/** Map size in tiles */
-	public static final Dimension MAP_SIZE = new Dimension(30, 1000);
+	public static final Dimension MAP_SIZE = new Dimension(24, 1000);
 
 	/** Viewport size in pixels */
 	public static final Dimension VIEWPORT_SIZE_PX = new Dimension(800, 800);

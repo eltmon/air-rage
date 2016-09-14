@@ -12,6 +12,9 @@ import java.io.IOException;
 public class Sprites {
 	private static Image planePlayer;
 
+	private static final Color GRASSY_GREEN = new Color(154, 212, 68);
+	private static final Color SEA_BLUE = new Color(42, 135, 181);
+
 	static {
 		try {
 			planePlayer = ImageIO.read(ClassLoader.getSystemResourceAsStream("sprites/plane-player-64x64.png"));
@@ -25,12 +28,12 @@ public class Sprites {
 	}
 
 	public static void paintLand(Graphics g) {
-		g.setColor(Color.GREEN);
+		g.setColor(GRASSY_GREEN);
 		g.fillRect(0, 0, Config.TILE_SIZE_PX.width, Config.TILE_SIZE_PX.height);
 	}
 
 	public static void paintSea(Graphics g) {
-		g.setColor(Color.BLUE);
+		g.setColor(SEA_BLUE);
 		g.fillRect(0, 0, Config.TILE_SIZE_PX.width, Config.TILE_SIZE_PX.height);
 	}
 }

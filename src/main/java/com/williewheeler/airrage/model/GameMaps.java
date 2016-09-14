@@ -18,7 +18,7 @@ public class GameMaps {
 			for (int j = 0; j < MAP_SIZE.width; j++) {
 //				double distFromCenter = (double)(Math.abs(MAP_SIZE.width / 2 - j)) / MAP_SIZE.width;
 				double distFromCenter = Math.abs(0.5 * Config.MAP_SIZE.width - j) / (double) Config.MAP_SIZE.width;
-				if (random.nextDouble() < distFromCenter) {
+				if (random.nextDouble() < distFromCenter * 3.0) {
 					gameMap[i][j] = Tiles.LAND;
 				} else {
 					gameMap[i][j] = Tiles.SEA;
