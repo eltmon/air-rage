@@ -41,8 +41,10 @@ public class GamePane extends JComponent {
 		int tileRowLower = viewYLower / TILE_SIZE_PX.height;
 		int tileRowUpper = viewYUpper / TILE_SIZE_PX.height + 1;
 
-		int viewportX = Math.max(gameState.getPlaneX() + (Config.TILE_SIZE_PX.width - Config.VIEWPORT_SIZE_PX.width) / 2, 0);
-		viewportX = Math.min(viewportX, Config.VIEWPORT_SIZE_PX.width / 2 - 1);
+
+		int viewportX = Math.max(gameState.getPlaneX() + (Config.PLAYER_SIZE_PX.width - Config.VIEWPORT_SIZE_PX.width) / 2, 0);
+		viewportX = Math.min(viewportX, Config.MAP_SIZE_PX.width - Config.VIEWPORT_SIZE_PX.width - 1);
+
 		g.translate(-viewportX, 0);
 
 		int tileColLower = viewportX / Config.TILE_SIZE_PX.width;

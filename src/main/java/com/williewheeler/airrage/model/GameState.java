@@ -55,7 +55,7 @@ public class GameState {
 
 	public void movePlaneRight(int distance) {
 		this.planeX += distance;
-		int limit = Config.MAP_SIZE_PX.width - Config.TILE_SIZE_PX.width - 1;
+		int limit = Config.MAP_SIZE_PX.width - Config.PLAYER_SIZE_PX.width - 1;
 		if (planeX > limit) {
 			this.planeX = limit;
 		}

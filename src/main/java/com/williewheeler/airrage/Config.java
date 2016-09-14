@@ -25,6 +25,8 @@ public class Config {
 	/** Viewport size in pixels */
 	public static final Dimension VIEWPORT_SIZE_PX = new Dimension(800, 800);
 
+	public static final Dimension PLAYER_SIZE_PX = new Dimension(64, 64);
+
 	/** Tile size in pixels */
 	public static final Dimension TILE_SIZE_PX = new Dimension(40, 40);
 
