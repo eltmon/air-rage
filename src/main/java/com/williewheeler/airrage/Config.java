@@ -19,6 +19,10 @@ public class Config {
 	/** Horizontal speed: pixels per frame */
 	public static final int PLANE_SPEED = 5;
 
+	public static final int MIN_PLANE_Y_OFFSET = 20;
+
+	public static final int MAX_PLANE_Y_OFFSET = 400;
+
 	/** Map size in tiles */
 	public static final Dimension MAP_SIZE = new Dimension(24, 1000);
 

@@ -11,10 +11,9 @@ import java.awt.event.KeyListener;
 public class InputManager {
 	private KeyListener keyListener;
 
-	/** Does user intend to move left? */
+	private boolean moveUpIntent;
+	private boolean moveDownIntent;
 	private boolean moveLeftIntent;
-
-	/** Does user intend to move right? */
 	private boolean moveRightIntent;
 
 	public InputManager() {
@@ -24,6 +23,10 @@ public class InputManager {
 	public KeyListener getKeyListener() {
 		return keyListener;
 	}
+
+	public boolean getMoveUpIntent() { return moveUpIntent; }
+
+	public boolean getMoveDownIntent() { return moveDownIntent; }
 
 	public boolean getMoveLeftIntent() {
 		return moveLeftIntent;
@@ -42,7 +45,11 @@ public class InputManager {
 		@Override
 		public void keyPressed(KeyEvent e) {
 			int code = e.getKeyCode();
-			if (code == KeyEvent.VK_LEFT) {
+			if (code == KeyEvent.VK_UP) {
+				moveUpIntent = true;
+			} else if (code == KeyEvent.VK_DOWN) {
+				moveDownIntent = true;
+			} else if (code == KeyEvent.VK_LEFT) {
 				moveLeftIntent = true;
 			} else if (code == KeyEvent.VK_RIGHT) {
 				moveRightIntent = true;
@@ -52,7 +59,11 @@ public class InputManager {
 		@Override
 		public void keyReleased(KeyEvent e) {
 			int code = e.getKeyCode();
-			if (code == KeyEvent.VK_LEFT) {
+			if (code == KeyEvent.VK_UP) {
+				moveUpIntent = false;
+			} else if (code == KeyEvent.VK_DOWN) {
+				moveDownIntent = false;
+			} else if (code == KeyEvent.VK_LEFT) {
 				moveLeftIntent = false;
 			} else if (code == KeyEvent.VK_RIGHT) {
 				moveRightIntent = false;

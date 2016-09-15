@@ -14,20 +14,18 @@ public class GameState {
 	// Note that this isn't the same as the plane y.
 	private int progressY;
 
-	private int planeX;
+	private int playerX;
+	private int playerYOffset;
 
 	public GameState() {
 		this.gameMap = GameMaps.getGameMap();
 		this.progressY = 0;
-		this.planeX = (Config.MAP_SIZE_PX.width - Config.TILE_SIZE_PX.width) / 2;
+		this.playerX = (Config.MAP_SIZE_PX.width - Config.TILE_SIZE_PX.width) / 2;
+		this.playerYOffset = (Config.MAX_PLANE_Y_OFFSET - Config.MIN_PLANE_Y_OFFSET) / 2;
 	}
 
 	public int[][] getGameMap() {
 		return gameMap;
-	}
-
-	public void setGameMap(int[][] gameMap) {
-		this.gameMap = gameMap;
 	}
 
 	public int getProgressY() {
@@ -38,26 +36,38 @@ public class GameState {
 		this.progressY += distance;
 	}
 
-	public int getPlaneX() {
-		return planeX;
+	public int getPlayerX() {
+		return playerX;
 	}
 
-	public void setPlaneX(int planeX) {
-		this.planeX = planeX;
+	public int getPlayerYOffset() { return playerYOffset; }
+
+	public void movePlaneUp(int distance) {
+		this.playerYOffset += distance;
+		if (playerYOffset > Config.MAX_PLANE_Y_OFFSET) {
+			this.playerYOffset = Config.MAX_PLANE_Y_OFFSET;
+		}
+	}
+
+	public void movePlaneDown(int distance) {
+		this.playerYOffset -= distance;
+		if (playerYOffset < Config.MIN_PLANE_Y_OFFSET) {
+			this.playerYOffset = Config.MIN_PLANE_Y_OFFSET;
+		}
 	}
 
 	public void movePlaneLeft(int distance) {
-		this.planeX -= distance;
-		if (planeX < 0) {
-			this.planeX = 0;
+		this.playerX -= distance;
+		if (playerX < 0) {
+			this.playerX = 0;
 		}
 	}
 
 	public void movePlaneRight(int distance) {
-		this.planeX += distance;
+		this.playerX += distance;
 		int limit = Config.MAP_SIZE_PX.width - Config.PLAYER_SIZE_PX.width - 1;
-		if (planeX > limit) {
-			this.planeX = limit;
+		if (playerX > limit) {
+			this.playerX = limit;
 		}
 	}
 }

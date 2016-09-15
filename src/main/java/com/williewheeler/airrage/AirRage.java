@@ -53,6 +53,12 @@ public class AirRage extends JFrame {
 
 	private void updateState() {
 		gameState.incrementProgressY(Config.PROGRESS_SPEED);
+		if (inputManager.getMoveUpIntent()) {
+			gameState.movePlaneUp(Config.PLANE_SPEED);
+		}
+		if (inputManager.getMoveDownIntent()) {
+			gameState.movePlaneDown(Config.PLANE_SPEED);
+		}
 		if (inputManager.getMoveLeftIntent()) {
 			gameState.movePlaneLeft(Config.PLANE_SPEED);
 		}

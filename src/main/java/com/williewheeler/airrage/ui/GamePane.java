@@ -32,18 +32,21 @@ public class GamePane extends JComponent {
 	private void paintTiles(Graphics g) {
 		int[][] gameMap = gameState.getGameMap();
 		int progressY = gameState.getProgressY();
+		int playerYOffset = gameState.getPlayerYOffset();
+
+		// mySize gives us the actual viewport height, not the frame height. (The frame height includes chrome.)
+		Dimension mySize = getSize();
 
 		// Determine view bounds in game coords.
 		int viewYLower = progressY;
-		int viewYUpper = viewYLower + VIEWPORT_SIZE_PX.height;
+		int viewYUpper = viewYLower + mySize.height + Config.TILE_SIZE_PX.height;
 
 		// Determine corresponding view bounds in tile coords.
 		int tileRowLower = viewYLower / TILE_SIZE_PX.height;
 		int tileRowUpper = viewYUpper / TILE_SIZE_PX.height + 1;
 
-
-		int viewportX = Math.max(gameState.getPlaneX() + (Config.PLAYER_SIZE_PX.width - Config.VIEWPORT_SIZE_PX.width) / 2, 0);
-		viewportX = Math.min(viewportX, Config.MAP_SIZE_PX.width - Config.VIEWPORT_SIZE_PX.width - 1);
+		int viewportX = Math.max(gameState.getPlayerX() + (Config.PLAYER_SIZE_PX.width - mySize.width) / 2, 0);
+		viewportX = Math.min(viewportX, Config.MAP_SIZE_PX.width - mySize.width - 1);
 
 		g.translate(-viewportX, 0);
 
@@ -72,8 +75,9 @@ public class GamePane extends JComponent {
 			}
 		}
 
-		g.translate(gameState.getPlaneX(), 600);
+		int yOffset = mySize.height - Config.PLAYER_SIZE_PX.height - playerYOffset;
+		g.translate(gameState.getPlayerX(), yOffset);
 		Sprites.paintPlane(g);
-		g.translate(-gameState.getPlaneX(), -600);
+		g.translate(-gameState.getPlayerX(), -yOffset);
 	}
 }
