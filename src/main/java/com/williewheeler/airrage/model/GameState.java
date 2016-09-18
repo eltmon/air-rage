@@ -1,6 +1,7 @@
 package com.williewheeler.airrage.model;
 
 import com.williewheeler.airrage.Config;
+import com.williewheeler.airrage.ui.audio.AudioManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,12 +35,20 @@ public class GameState {
 
 	private int frameCount;
 
+	// FIXME remove
+	private AudioManager audioManager;
+
 	public GameState() {
 		this.gameMap = GameMaps.getGameMap();
 		this.progressY = 0;
 		this.playerX = (Config.MAP_SIZE_PX.width - Config.TILE_SIZE_PX.width) / 2;
 		this.playerYOffset = (Config.MAX_PLAYER_Y_OFFSET - Config.MIN_PLAYER_Y_OFFSET) / 2;
 		this.frameCount = 0;
+	}
+
+	// FIXME Remove this
+	public void setAudioManager(AudioManager audioManager) {
+		this.audioManager = audioManager;
 	}
 
 	public int[][] getGameMap() {
@@ -140,15 +149,23 @@ public class GameState {
 	}
 
 	public void fireGuns() {
-		PlayerMissile missile = new PlayerMissile(playerX, getPlayerY(), 300);
-		playerMissiles.add(missile);
+		// TODO Remove hardcodes, and the coords should be the missile centroids
+		// Also player coords need to be centroid as well
+		int missileY = getPlayerY() + Config.PLAYER_SIZE_PX.height;
+		PlayerMissile leftMissile = new PlayerMissile(playerX + 7, missileY, 300);
+		PlayerMissile rightMissile = new PlayerMissile(playerX + 45, missileY, 300);
+		playerMissiles.add(leftMissile);
+		playerMissiles.add(rightMissile);
+
+		// FIXME This doesn't belong here
+		audioManager.playSoundEffect("gunfire", false);
 	}
 
 	/**
 	 * Advance the game state forward one frame.
 	 */
 	public void updateState() {
-		purgeMissiles();
+		updateMissiles();
 		incrementProgressY(Config.PROGRESS_SPEED);
 		processUserInputs();
 		this.frameCount = (frameCount + 1) % Config.TARGET_FPS;
@@ -174,7 +191,7 @@ public class GameState {
 		}
 	}
 
-	private void purgeMissiles() {
+	private void updateMissiles() {
 		ListIterator<PlayerMissile> it = playerMissiles.listIterator();
 		while (it.hasNext()) {
 			PlayerMissile missile = it.next();

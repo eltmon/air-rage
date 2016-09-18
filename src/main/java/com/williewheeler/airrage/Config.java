@@ -39,5 +39,5 @@ public class Config {
 	public static final int MAX_PLAYER_Y_OFFSET = 400;
 
 	/** Fire period in frames. */
-	public static final int PLAYER_FIRE_PERIOD = TARGET_FPS / 6;
+	public static final int PLAYER_FIRE_PERIOD = TARGET_FPS / 10;
 }

@@ -88,13 +88,19 @@ public class GamePane extends JComponent {
 
 	private void paintPlayerMissiles(Graphics g) {
 		Dimension mySize = getSize();
-		g.setColor(Color.RED);
 		List<PlayerMissile> missiles = gameState.getPlayerMissiles();
 		for (PlayerMissile missile : missiles) {
-			int shiftX = missile.getX() - 10;
-			int shiftY = gameState.getProgressY() - missile.getY() - 10;
+			int missileYOffset = missile.getY() - gameState.getProgressY();
+			int shiftX = missile.getX();
+			int shiftY = mySize.height - 10 - missileYOffset;
 			g.translate(shiftX, shiftY);
-			g.fillOval(0, 0, 20, 20);
+
+			g.setColor(Color.RED);
+			g.fillOval(0, 0, 9, 14);
+
+			g.setColor(Color.ORANGE);
+			g.fillOval(2, 2, 5, 10);
+
 			g.translate(-shiftX, - shiftY);
 		}
 	}

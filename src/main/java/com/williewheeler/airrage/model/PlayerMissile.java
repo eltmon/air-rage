@@ -34,7 +34,7 @@ public class PlayerMissile {
 
 	public void updateMissileState() {
 		// TODO Adjust location based on initial direction vector
-		y += 10;
+		this.y += 15;
 		decrementTtl();
 	}
 

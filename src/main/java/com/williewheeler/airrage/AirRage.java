@@ -32,6 +32,10 @@ public class AirRage extends JFrame {
 		this.gamePane = new GamePane(gameState);
 		this.inputManager = new InputManager(gameState);
 		this.audioManager = new AudioManager(new AudioLoader());
+
+		// FIXME Get rid of this
+		gameState.setAudioManager(audioManager);
+
 		getContentPane().add(gamePane);
 		addKeyListener(inputManager.getKeyListener());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
