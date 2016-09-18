@@ -16,8 +16,10 @@ public class Sprites {
 	private static final Color SEA_BLUE = new Color(42, 135, 181);
 
 	static {
+		String player = "sprites/plane-player-64x64.png";
+//		String player = "sprites/zero-white.png";
 		try {
-			planePlayer = ImageIO.read(ClassLoader.getSystemResourceAsStream("sprites/plane-player-64x64.png"));
+			planePlayer = ImageIO.read(ClassLoader.getSystemResourceAsStream(player));
 		} catch (IOException e) {
 			throw new ExceptionInInitializerError(e);
 		}

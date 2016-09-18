@@ -3,6 +3,8 @@ package com.williewheeler.airrage;
 import com.williewheeler.airrage.model.GameState;
 import com.williewheeler.airrage.ui.GamePane;
 import com.williewheeler.airrage.ui.InputManager;
+import com.williewheeler.airrage.ui.audio.AudioManager;
+import com.williewheeler.airrage.ui.audio.AudioLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,6 +19,7 @@ public class AirRage extends JFrame {
 	private GameState gameState;
 	private GamePane gamePane;
 	private InputManager inputManager;
+	private AudioManager audioManager;
 
 	public static void main(String[] args) {
 		AirRage rage = new AirRage();
@@ -27,7 +30,8 @@ public class AirRage extends JFrame {
 		super("-= AirRage =-");
 		this.gameState = new GameState();
 		this.gamePane = new GamePane(gameState);
-		this.inputManager = new InputManager();
+		this.inputManager = new InputManager(gameState);
+		this.audioManager = new AudioManager(new AudioLoader());
 		getContentPane().add(gamePane);
 		addKeyListener(inputManager.getKeyListener());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -41,29 +45,17 @@ public class AirRage extends JFrame {
 	}
 
 	private void startGameLoop() {
+
+		// TODO Figure out how to make this continuous
+		audioManager.playSoundEffect("airplane+spita", true);
+
 		while (true) {
 			long startMs = System.currentTimeMillis();
-			updateState();
+			gameState.updateState();
 			repaint();
 			long duration = System.currentTimeMillis() - startMs;
 			long sleepMs = Config.TARGET_FRAME_DURATION - duration;
 			GameUtil.sleep(Math.max(0, sleepMs));
-		}
-	}
-
-	private void updateState() {
-		gameState.incrementProgressY(Config.PROGRESS_SPEED);
-		if (inputManager.getMoveUpIntent()) {
-			gameState.movePlaneUp(Config.PLANE_SPEED);
-		}
-		if (inputManager.getMoveDownIntent()) {
-			gameState.movePlaneDown(Config.PLANE_SPEED);
-		}
-		if (inputManager.getMoveLeftIntent()) {
-			gameState.movePlaneLeft(Config.PLANE_SPEED);
-		}
-		if (inputManager.getMoveRightIntent()) {
-			gameState.movePlaneRight(Config.PLANE_SPEED);
 		}
 	}
 }

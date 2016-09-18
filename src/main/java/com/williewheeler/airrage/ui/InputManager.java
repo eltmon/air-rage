@@ -1,5 +1,7 @@
 package com.williewheeler.airrage.ui;
 
+import com.williewheeler.airrage.model.GameState;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -9,31 +11,16 @@ import java.awt.event.KeyListener;
  * Created by willie on 9/11/16.
  */
 public class InputManager {
+	private GameState gameState;
 	private KeyListener keyListener;
 
-	private boolean moveUpIntent;
-	private boolean moveDownIntent;
-	private boolean moveLeftIntent;
-	private boolean moveRightIntent;
-
-	public InputManager() {
+	public InputManager(GameState gameState) {
+		this.gameState = gameState;
 		this.keyListener = new KeyHandler();
 	}
 
 	public KeyListener getKeyListener() {
 		return keyListener;
-	}
-
-	public boolean getMoveUpIntent() { return moveUpIntent; }
-
-	public boolean getMoveDownIntent() { return moveDownIntent; }
-
-	public boolean getMoveLeftIntent() {
-		return moveLeftIntent;
-	}
-
-	public boolean getMoveRightIntent() {
-		return moveRightIntent;
 	}
 
 	private class KeyHandler implements KeyListener {
@@ -44,29 +31,26 @@ public class InputManager {
 
 		@Override
 		public void keyPressed(KeyEvent e) {
-			int code = e.getKeyCode();
-			if (code == KeyEvent.VK_UP) {
-				moveUpIntent = true;
-			} else if (code == KeyEvent.VK_DOWN) {
-				moveDownIntent = true;
-			} else if (code == KeyEvent.VK_LEFT) {
-				moveLeftIntent = true;
-			} else if (code == KeyEvent.VK_RIGHT) {
-				moveRightIntent = true;
-			}
+			setIntent(e, true);
 		}
 
 		@Override
 		public void keyReleased(KeyEvent e) {
+			setIntent(e, false);
+		}
+
+		private void setIntent(KeyEvent e, boolean value) {
 			int code = e.getKeyCode();
 			if (code == KeyEvent.VK_UP) {
-				moveUpIntent = false;
+				gameState.setMoveUpIntent(value);
 			} else if (code == KeyEvent.VK_DOWN) {
-				moveDownIntent = false;
+				gameState.setMoveDownIntent(value);
 			} else if (code == KeyEvent.VK_LEFT) {
-				moveLeftIntent = false;
+				gameState.setMoveLeftIntent(value);
 			} else if (code == KeyEvent.VK_RIGHT) {
-				moveRightIntent = false;
+				gameState.setMoveRightIntent(value);
+			} else if (code == KeyEvent.VK_SPACE) {
+				gameState.setFireIntent(value);
 			}
 		}
 	}

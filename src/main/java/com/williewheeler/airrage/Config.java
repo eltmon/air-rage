@@ -13,18 +13,8 @@ public class Config {
 	/** Duration of a single frame */
 	public static final int TARGET_FRAME_DURATION = 1000 / TARGET_FPS;
 
-	/** Map progress: pixels per frame */
-	public static final int PROGRESS_SPEED = 2;
-
-	/** Horizontal speed: pixels per frame */
-	public static final int PLANE_SPEED = 5;
-
-	public static final int MIN_PLANE_Y_OFFSET = 20;
-
-	public static final int MAX_PLANE_Y_OFFSET = 400;
-
 	/** Map size in tiles */
-	public static final Dimension MAP_SIZE = new Dimension(24, 1000);
+	public static final Dimension MAP_SIZE = new Dimension(30, 1000);
 
 	/** Viewport size in pixels */
 	public static final Dimension VIEWPORT_SIZE_PX = new Dimension(800, 800);
@@ -32,9 +22,22 @@ public class Config {
 	public static final Dimension PLAYER_SIZE_PX = new Dimension(64, 64);
 
 	/** Tile size in pixels */
-	public static final Dimension TILE_SIZE_PX = new Dimension(40, 40);
+	public static final Dimension TILE_SIZE_PX = new Dimension(32, 32);
 
 	/** Map size in pixels */
 	public static final Dimension MAP_SIZE_PX =
 			new Dimension(MAP_SIZE.width * TILE_SIZE_PX.width, MAP_SIZE.height * TILE_SIZE_PX.height);
+
+	/** Map progress: pixels per frame */
+	public static final int PROGRESS_SPEED = 2;
+
+	/** Horizontal speed: pixels per frame */
+	public static final int PLAYER_SPEED = 5;
+
+	public static final int MIN_PLAYER_Y_OFFSET = 20;
+
+	public static final int MAX_PLAYER_Y_OFFSET = 400;
+
+	/** Fire period in frames. */
+	public static final int PLAYER_FIRE_PERIOD = TARGET_FPS / 6;
 }
