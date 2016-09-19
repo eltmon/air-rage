@@ -41,8 +41,8 @@ public class InputManager {
 		}
 
 		private void setIntent(KeyEvent e, boolean value) {
-			int code = e.getKeyCode();
 			Player player = gameState.getPlayer();
+			int code = e.getKeyCode();
 			if (code == KeyEvent.VK_UP) {
 				player.setMoveUpIntent(value);
 			} else if (code == KeyEvent.VK_DOWN) {

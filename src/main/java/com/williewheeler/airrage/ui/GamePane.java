@@ -38,7 +38,7 @@ public class GamePane extends JComponent {
 	private void paintTiles(Graphics g) {
 		Player player = gameState.getPlayer();
 		int[][] gameMap = gameState.getGameMap();
-		int progressY = player.getY();
+		int progressY = player.getProgressY();
 
 		// mySize gives us the actual viewport height, not the frame height. (The frame height includes chrome.)
 		Dimension mySize = getSize();
