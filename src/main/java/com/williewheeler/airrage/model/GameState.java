@@ -35,6 +35,9 @@ public class GameState {
 
 	private int frameCount;
 
+	// TODO Temporary
+	private Plane enemy;
+
 	// FIXME remove
 	private AudioManager audioManager;
 
@@ -44,11 +47,18 @@ public class GameState {
 		this.playerX = (Config.MAP_SIZE_PX.width - Config.TILE_SIZE_PX.width) / 2;
 		this.playerYOffset = (Config.MAX_PLAYER_Y_OFFSET - Config.MIN_PLAYER_Y_OFFSET) / 2;
 		this.frameCount = 0;
+
+		this.enemy = new Plane(400, 1600, Math.PI);
 	}
 
 	// FIXME Remove this
 	public void setAudioManager(AudioManager audioManager) {
 		this.audioManager = audioManager;
+	}
+
+	// FIXME Remove this
+	public Plane getEnemy() {
+		return enemy;
 	}
 
 	public int[][] getGameMap() {
@@ -165,6 +175,7 @@ public class GameState {
 	 * Advance the game state forward one frame.
 	 */
 	public void updateState() {
+		updateEnemies();
 		updateMissiles();
 		incrementProgressY(Config.PROGRESS_SPEED);
 		processUserInputs();
@@ -189,6 +200,10 @@ public class GameState {
 				fireGuns();
 			}
 		}
+	}
+
+	private void updateEnemies() {
+		enemy.setY(enemy.getY() - 2);
 	}
 
 	private void updateMissiles() {

@@ -20,6 +20,7 @@ public class Config {
 	public static final Dimension VIEWPORT_SIZE_PX = new Dimension(800, 800);
 
 	public static final Dimension PLAYER_SIZE_PX = new Dimension(64, 64);
+	public static final Dimension ENEMY_SIZE_PX = new Dimension(64, 64);
 
 	/** Tile size in pixels */
 	public static final Dimension TILE_SIZE_PX = new Dimension(32, 32);
@@ -40,4 +41,5 @@ public class Config {
 
 	/** Fire period in frames. */
 	public static final int PLAYER_FIRE_PERIOD = TARGET_FPS / 10;
+//	public static final int PLAYER_FIRE_PERIOD = 1;
 }

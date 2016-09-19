@@ -2,6 +2,7 @@ package com.williewheeler.airrage.ui;
 
 import com.williewheeler.airrage.Config;
 import com.williewheeler.airrage.model.GameState;
+import com.williewheeler.airrage.model.Plane;
 import com.williewheeler.airrage.model.PlayerMissile;
 import com.williewheeler.airrage.model.Tiles;
 import org.slf4j.Logger;
@@ -32,6 +33,7 @@ public class GamePane extends JComponent {
 		// Assume that the viewport starts off in the correct world location.
 		// Our task is to transform objects from world coords to view coords.
 		paintTiles(g);
+		paintEnemies(g);
 		paintPlayer(g);
 		paintPlayerMissiles(g);
 	}
@@ -77,12 +79,25 @@ public class GamePane extends JComponent {
 		}
 	}
 
+	private void paintEnemies(Graphics g) {
+		Dimension mySize = getSize();
+		int playerYOffset = gameState.getPlayerYOffset();
+		Plane enemy = gameState.getEnemy();
+		int enemyYOffset = enemy.getY() - gameState.getProgressY();
+		int shiftX = enemy.getX();
+		int shiftY = mySize.height - Config.ENEMY_SIZE_PX.height / 2 - enemyYOffset;
+
+		g.translate(shiftX, shiftY);
+		Sprites.paintEnemy(g, enemy);
+		g.translate(-shiftX, -shiftY);
+	}
+
 	private void paintPlayer(Graphics g) {
 		Dimension mySize = getSize();
 		int playerYOffset = gameState.getPlayerYOffset();
 		int yOffset = mySize.height - Config.PLAYER_SIZE_PX.height - playerYOffset;
 		g.translate(gameState.getPlayerX(), yOffset);
-		Sprites.paintPlane(g);
+		Sprites.paintPlayer(g);
 		g.translate(-gameState.getPlayerX(), -yOffset);
 	}
 
