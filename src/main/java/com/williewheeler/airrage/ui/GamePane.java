@@ -1,10 +1,7 @@
 package com.williewheeler.airrage.ui;
 
 import com.williewheeler.airrage.Config;
-import com.williewheeler.airrage.model.GameState;
-import com.williewheeler.airrage.model.Plane;
-import com.williewheeler.airrage.model.PlayerMissile;
-import com.williewheeler.airrage.model.Tiles;
+import com.williewheeler.airrage.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,8 +36,9 @@ public class GamePane extends JComponent {
 	}
 
 	private void paintTiles(Graphics g) {
+		Player player = gameState.getPlayer();
 		int[][] gameMap = gameState.getGameMap();
-		int progressY = gameState.getProgressY();
+		int progressY = player.getY();
 
 		// mySize gives us the actual viewport height, not the frame height. (The frame height includes chrome.)
 		Dimension mySize = getSize();
@@ -53,7 +51,7 @@ public class GamePane extends JComponent {
 		int tileRowLower = viewYLower / TILE_SIZE_PX.height;
 		int tileRowUpper = viewYUpper / TILE_SIZE_PX.height + 1;
 
-		int viewportX = Math.max(gameState.getPlayerX() + (Config.PLAYER_SIZE_PX.width - mySize.width) / 2, 0);
+		int viewportX = Math.max(player.getX() + (Player.PLAYER_SIZE_PX.width - mySize.width) / 2, 0);
 		viewportX = Math.min(viewportX, Config.MAP_SIZE_PX.width - mySize.width - 1);
 		g.translate(-viewportX, 0);
 
@@ -80,10 +78,11 @@ public class GamePane extends JComponent {
 	}
 
 	private void paintEnemies(Graphics g) {
+		Player player = gameState.getPlayer();
 		Dimension mySize = getSize();
-		int playerYOffset = gameState.getPlayerYOffset();
+		int playerYOffset = player.getYOffset();
 		Plane enemy = gameState.getEnemy();
-		int enemyYOffset = enemy.getY() - gameState.getProgressY();
+		int enemyYOffset = enemy.getY() - player.getProgressY();
 		int shiftX = enemy.getX();
 		int shiftY = mySize.height - Config.ENEMY_SIZE_PX.height / 2 - enemyYOffset;
 
@@ -93,19 +92,21 @@ public class GamePane extends JComponent {
 	}
 
 	private void paintPlayer(Graphics g) {
+		Player player = gameState.getPlayer();
 		Dimension mySize = getSize();
-		int playerYOffset = gameState.getPlayerYOffset();
-		int yOffset = mySize.height - Config.PLAYER_SIZE_PX.height - playerYOffset;
-		g.translate(gameState.getPlayerX(), yOffset);
+		int playerYOffset = player.getYOffset();
+		int yOffset = mySize.height - Player.PLAYER_SIZE_PX.height - playerYOffset;
+		g.translate(player.getX(), yOffset);
 		Sprites.paintPlayer(g);
-		g.translate(-gameState.getPlayerX(), -yOffset);
+		g.translate(-player.getX(), -yOffset);
 	}
 
 	private void paintPlayerMissiles(Graphics g) {
+		Player player = gameState.getPlayer();
 		Dimension mySize = getSize();
 		List<PlayerMissile> missiles = gameState.getPlayerMissiles();
 		for (PlayerMissile missile : missiles) {
-			int missileYOffset = missile.getY() - gameState.getProgressY();
+			int missileYOffset = missile.getY() - player.getProgressY();
 			int shiftX = missile.getX();
 			int shiftY = mySize.height - 10 - missileYOffset;
 			g.translate(shiftX, shiftY);

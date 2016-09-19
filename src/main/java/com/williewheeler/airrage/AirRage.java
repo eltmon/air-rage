@@ -34,7 +34,7 @@ public class AirRage extends JFrame {
 		this.audioManager = new AudioManager(new AudioLoader());
 
 		// FIXME Get rid of this
-		gameState.setAudioManager(audioManager);
+		gameState.getPlayer().setAudioManager(audioManager);
 
 		getContentPane().add(gamePane);
 		addKeyListener(inputManager.getKeyListener());

@@ -19,7 +19,6 @@ public class Config {
 	/** Viewport size in pixels */
 	public static final Dimension VIEWPORT_SIZE_PX = new Dimension(800, 800);
 
-	public static final Dimension PLAYER_SIZE_PX = new Dimension(64, 64);
 	public static final Dimension ENEMY_SIZE_PX = new Dimension(64, 64);
 
 	/** Tile size in pixels */
@@ -28,18 +27,4 @@ public class Config {
 	/** Map size in pixels */
 	public static final Dimension MAP_SIZE_PX =
 			new Dimension(MAP_SIZE.width * TILE_SIZE_PX.width, MAP_SIZE.height * TILE_SIZE_PX.height);
-
-	/** Map progress: pixels per frame */
-	public static final int PROGRESS_SPEED = 2;
-
-	/** Horizontal speed: pixels per frame */
-	public static final int PLAYER_SPEED = 5;
-
-	public static final int MIN_PLAYER_Y_OFFSET = 20;
-
-	public static final int MAX_PLAYER_Y_OFFSET = 400;
-
-	/** Fire period in frames. */
-	public static final int PLAYER_FIRE_PERIOD = TARGET_FPS / 10;
-//	public static final int PLAYER_FIRE_PERIOD = 1;
 }

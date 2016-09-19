@@ -1,6 +1,7 @@
 package com.williewheeler.airrage.ui;
 
 import com.williewheeler.airrage.model.GameState;
+import com.williewheeler.airrage.model.Player;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -41,16 +42,17 @@ public class InputManager {
 
 		private void setIntent(KeyEvent e, boolean value) {
 			int code = e.getKeyCode();
+			Player player = gameState.getPlayer();
 			if (code == KeyEvent.VK_UP) {
-				gameState.setMoveUpIntent(value);
+				player.setMoveUpIntent(value);
 			} else if (code == KeyEvent.VK_DOWN) {
-				gameState.setMoveDownIntent(value);
+				player.setMoveDownIntent(value);
 			} else if (code == KeyEvent.VK_LEFT) {
-				gameState.setMoveLeftIntent(value);
+				player.setMoveLeftIntent(value);
 			} else if (code == KeyEvent.VK_RIGHT) {
-				gameState.setMoveRightIntent(value);
+				player.setMoveRightIntent(value);
 			} else if (code == KeyEvent.VK_SPACE) {
-				gameState.setFireIntent(value);
+				player.setFireIntent(value);
 			}
 		}
 	}
