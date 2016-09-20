@@ -3,12 +3,15 @@ package com.williewheeler.airrage.model;
 import com.williewheeler.airrage.Config;
 import com.williewheeler.airrage.event.GameEvent;
 import com.williewheeler.airrage.event.GameListener;
+import com.williewheeler.airrage.model.level.Level;
+import com.williewheeler.airrage.model.trigger.Trigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Queue;
 
 /**
  * Created by willie on 9/11/16.
@@ -18,20 +21,16 @@ public class GameState {
 
 	private List<GameListener> gameListeners = new LinkedList<>();
 
-	/**
-	 * Tile coords. Row 0 is at the bottom of the map.
-	 */
-	private int[][] gameMap;
-
 	private Player player;
+	private Level level;
 
 	private List<Plane> planes = new LinkedList<>();
 	private List<PlayerMissile> playerMissiles = new LinkedList<>();
 
 	private int frameIndex;
 
-	public GameState() {
-		this.gameMap = GameMaps.getGameMap();
+	public GameState(Level level) {
+		this.level = level;
 		this.player = new Player(this);
 		this.frameIndex = 0;
 	}
@@ -40,12 +39,12 @@ public class GameState {
 		gameListeners.add(listener);
 	}
 
-	public int[][] getGameMap() {
-		return gameMap;
-	}
-
 	public Player getPlayer() {
 		return player;
+	}
+
+	public Level getLevel() {
+		return level;
 	}
 
 	public List<Plane> getPlanes() { return planes; }
@@ -67,6 +66,7 @@ public class GameState {
 		player.updateState(frameIndex);
 		updateEnemies();
 		updateMissiles();
+		fireTriggers();
 		this.frameIndex = (frameIndex + 1) % Config.TARGET_FPS;
 	}
 
@@ -92,6 +92,14 @@ public class GameState {
 			if (missile.getTtl() == 0) {
 				it.remove();
 			}
+		}
+	}
+
+	private void fireTriggers() {
+		Queue<Trigger> triggers = level.getTriggers();
+		if (triggers.peek().canFire(this)) {
+			Trigger trigger = triggers.poll();
+			trigger.fireTrigger(this);
 		}
 	}
 }

@@ -1,4 +1,4 @@
-package com.williewheeler.airrage.model;
+package com.williewheeler.airrage.model.level;
 
 /**
  * Created by willie on 9/4/16.

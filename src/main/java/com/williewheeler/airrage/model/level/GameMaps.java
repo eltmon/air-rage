@@ -1,4 +1,4 @@
-package com.williewheeler.airrage.model;
+package com.williewheeler.airrage.model.level;
 
 import com.williewheeler.airrage.Config;
 

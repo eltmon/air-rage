@@ -3,6 +3,7 @@ package com.williewheeler.airrage;
 import com.williewheeler.airrage.event.GameEvent;
 import com.williewheeler.airrage.event.GameListener;
 import com.williewheeler.airrage.model.GameState;
+import com.williewheeler.airrage.model.level.Levels;
 import com.williewheeler.airrage.ui.GamePane;
 import com.williewheeler.airrage.ui.InputManager;
 import com.williewheeler.airrage.ui.audio.AudioLoader;
@@ -32,7 +33,7 @@ public class AirRage extends JFrame {
 
 	public AirRage() {
 		super("-= AirRage =-");
-		this.gameState = new GameState();
+		this.gameState = new GameState(Levels.getLevel(0));
 		this.gamePane = new GamePane(gameState);
 		this.inputManager = new InputManager(gameState);
 		this.audioManager = new AudioManager(new AudioLoader());

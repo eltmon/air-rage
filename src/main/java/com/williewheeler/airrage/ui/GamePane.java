@@ -2,6 +2,8 @@ package com.williewheeler.airrage.ui;
 
 import com.williewheeler.airrage.Config;
 import com.williewheeler.airrage.model.*;
+import com.williewheeler.airrage.model.level.Level;
+import com.williewheeler.airrage.model.level.Tiles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,8 +36,10 @@ public class GamePane extends JComponent {
 
 	private void paintTiles(Graphics g) {
 		Player player = gameState.getPlayer();
-		int[][] gameMap = gameState.getGameMap();
 		int progressY = player.getProgressY();
+
+		Level level = gameState.getLevel();
+		int[][] gameMap = level.getGameMap();
 
 		// mySize gives us the actual viewport height, not the frame height. (The frame height includes chrome.)
 		Dimension mySize = getSize();
