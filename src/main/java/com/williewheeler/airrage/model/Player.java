@@ -1,7 +1,7 @@
 package com.williewheeler.airrage.model;
 
 import com.williewheeler.airrage.Config;
-import com.williewheeler.airrage.ui.audio.AudioManager;
+import com.williewheeler.airrage.event.GameEvent;
 
 import java.awt.*;
 
@@ -38,9 +38,6 @@ public class Player implements GameObject {
 	private boolean moveLeftIntent;
 	private boolean moveRightIntent;
 	private boolean fireIntent;
-
-	// FIXME This doesn't belong here. Fire state events and have a handler play the audio.
-	private AudioManager audioManager;
 
 	public Player(GameState gameState) {
 		this.gameState = gameState;
@@ -95,11 +92,6 @@ public class Player implements GameObject {
 
 	public void setFireIntent(boolean fireIntent) {
 		this.fireIntent = fireIntent;
-	}
-
-	// FIXME Remove this
-	public void setAudioManager(AudioManager audioManager) {
-		this.audioManager = audioManager;
 	}
 
 	@Override
@@ -159,11 +151,11 @@ public class Player implements GameObject {
 
 		// TODO Remove hardcodes, and the coords should be the missile centroids
 		// Also player coords need to be centroid as well
-		int missileY = getY() + PLAYER_SIZE_PX.height;
+		int missileY = getY() + PLAYER_SIZE_PX.height - 24;
 		gameState.addPlayerMissile(new PlayerMissile(x + 7, missileY, 300));
 		gameState.addPlayerMissile(new PlayerMissile(x + 45, missileY, 300));
 
-		// FIXME This doesn't belong here
-		audioManager.playSoundEffect("gunfire", false);
+		GameEvent event = new GameEvent(GameEvent.PLAYER_FIRED);
+		gameState.fireGameEvent(event);
 	}
 }

@@ -1,10 +1,12 @@
 package com.williewheeler.airrage;
 
+import com.williewheeler.airrage.event.GameEvent;
+import com.williewheeler.airrage.event.GameListener;
 import com.williewheeler.airrage.model.GameState;
 import com.williewheeler.airrage.ui.GamePane;
 import com.williewheeler.airrage.ui.InputManager;
-import com.williewheeler.airrage.ui.audio.AudioManager;
 import com.williewheeler.airrage.ui.audio.AudioLoader;
+import com.williewheeler.airrage.ui.audio.AudioManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +22,7 @@ public class AirRage extends JFrame {
 	private GamePane gamePane;
 	private InputManager inputManager;
 	private AudioManager audioManager;
+	private GameListener gameListener;
 
 	public static void main(String[] args) {
 		AirRage rage = new AirRage();
@@ -32,9 +35,9 @@ public class AirRage extends JFrame {
 		this.gamePane = new GamePane(gameState);
 		this.inputManager = new InputManager(gameState);
 		this.audioManager = new AudioManager(new AudioLoader());
+		this.gameListener = new GameHandler();
 
-		// FIXME Get rid of this
-		gameState.getPlayer().setAudioManager(audioManager);
+		gameState.addGameListener(gameListener);
 
 		getContentPane().add(gamePane);
 		addKeyListener(inputManager.getKeyListener());
@@ -60,6 +63,17 @@ public class AirRage extends JFrame {
 			long duration = System.currentTimeMillis() - startMs;
 			long sleepMs = Config.TARGET_FRAME_DURATION - duration;
 			GameUtil.sleep(Math.max(0, sleepMs));
+		}
+	}
+
+	private final class GameHandler implements GameListener {
+
+		@Override
+		public void handleGameEvent(GameEvent event) {
+			String type = event.getType();
+			if (GameEvent.PLAYER_FIRED.equals(type)) {
+				audioManager.playSoundEffect("gunfire", false);
+			}
 		}
 	}
 }

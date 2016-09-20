@@ -3,7 +3,8 @@ package com.williewheeler.airrage.model;
 /**
  * Created by willie on 9/14/16.
  */
-public class PlayerMissile {
+public class PlayerMissile implements GameObject {
+	private static final int SPEED = 15;
 
 	// x coord of the center of the missile
 	private int x;
@@ -20,21 +21,30 @@ public class PlayerMissile {
 		this.ttl = ttl;
 	}
 
+	@Override
 	public int getX() {
 		return x;
 	}
 
+	@Override
 	public int getY() {
 		return y;
 	}
 
+	@Override
+	public double getRotation() {
+		return 0.0;
+	}
+
+	@Override
 	public int getTtl() {
 		return ttl;
 	}
 
-	public void updateMissileState() {
+	@Override
+	public void updateState(int frameIndex) {
 		// TODO Adjust location based on initial direction vector
-		this.y += 15;
+		this.y += SPEED;
 		decrementTtl();
 	}
 

@@ -1,6 +1,8 @@
 package com.williewheeler.airrage.model;
 
 import com.williewheeler.airrage.Config;
+import com.williewheeler.airrage.event.GameEvent;
+import com.williewheeler.airrage.event.GameListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +15,8 @@ import java.util.ListIterator;
  */
 public class GameState {
 	private static final Logger log = LoggerFactory.getLogger(GameState.class);
+
+	private List<GameListener> gameListeners = new LinkedList<>();
 
 	/**
 	 * Tile coords. Row 0 is at the bottom of the map.
@@ -35,6 +39,10 @@ public class GameState {
 
 		// TODO Temporary
 		this.enemy = new Plane(400, 1600, Math.PI);
+	}
+
+	public void addGameListener(GameListener listener) {
+		gameListeners.add(listener);
 	}
 
 	// FIXME Remove this
@@ -68,6 +76,12 @@ public class GameState {
 		this.frameIndex = (frameIndex + 1) % Config.TARGET_FPS;
 	}
 
+	void fireGameEvent(GameEvent event) {
+		for (GameListener listener : gameListeners) {
+			listener.handleGameEvent(event);
+		}
+	}
+
 	private void updateEnemies() {
 		enemy.updateState(frameIndex);
 	}
@@ -76,7 +90,7 @@ public class GameState {
 		ListIterator<PlayerMissile> it = playerMissiles.listIterator();
 		while (it.hasNext()) {
 			PlayerMissile missile = it.next();
-			missile.updateMissileState();
+			missile.updateState(frameIndex);
 			if (missile.getTtl() == 0) {
 				it.remove();
 			}
