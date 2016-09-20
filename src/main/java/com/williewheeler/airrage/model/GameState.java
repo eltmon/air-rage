@@ -25,29 +25,19 @@ public class GameState {
 
 	private Player player;
 
+	private List<Plane> planes = new LinkedList<>();
 	private List<PlayerMissile> playerMissiles = new LinkedList<>();
 
 	private int frameIndex;
-
-	// TODO Temporary
-	private Plane enemy;
 
 	public GameState() {
 		this.gameMap = GameMaps.getGameMap();
 		this.player = new Player(this);
 		this.frameIndex = 0;
-
-		// TODO Temporary
-		this.enemy = new Plane(400, 1600, Math.PI);
 	}
 
 	public void addGameListener(GameListener listener) {
 		gameListeners.add(listener);
-	}
-
-	// FIXME Remove this
-	public Plane getEnemy() {
-		return enemy;
 	}
 
 	public int[][] getGameMap() {
@@ -57,6 +47,10 @@ public class GameState {
 	public Player getPlayer() {
 		return player;
 	}
+
+	public List<Plane> getPlanes() { return planes; }
+
+	public void addPlane(Plane plane) { planes.add(plane); }
 
 	public List<PlayerMissile> getPlayerMissiles() {
 		return playerMissiles;
@@ -83,7 +77,11 @@ public class GameState {
 	}
 
 	private void updateEnemies() {
-		enemy.updateState(frameIndex);
+		ListIterator<Plane> it = planes.listIterator();
+		while (it.hasNext()) {
+			Plane plane = it.next();
+			plane.updateState(frameIndex);
+		}
 	}
 
 	private void updateMissiles() {

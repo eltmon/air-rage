@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * Created by willie on 9/4/16.
@@ -44,6 +45,9 @@ public class AirRage extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(Config.VIEWPORT_SIZE_PX);
 		setResizable(false);
+
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		setLocation((screenSize.width - getSize().width) / 2, (screenSize.height - getSize().height) / 2);
 	}
 
 	public void startGame() {

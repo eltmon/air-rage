@@ -26,9 +26,6 @@ public class GamePane extends JComponent {
 
 	@Override
 	public void paint(Graphics g) {
-
-		// Assume that the viewport starts off in the correct world location.
-		// Our task is to transform objects from world coords to view coords.
 		paintTiles(g);
 		paintEnemies(g);
 		paintPlayer(g);
@@ -81,14 +78,15 @@ public class GamePane extends JComponent {
 		Player player = gameState.getPlayer();
 		Dimension mySize = getSize();
 		int playerYOffset = player.getYOffset();
-		Plane enemy = gameState.getEnemy();
-		int enemyYOffset = enemy.getY() - player.getProgressY();
-		int shiftX = enemy.getX();
-		int shiftY = mySize.height - Config.ENEMY_SIZE_PX.height / 2 - enemyYOffset;
-
-		g.translate(shiftX, shiftY);
-		Sprites.paintEnemy(g, enemy);
-		g.translate(-shiftX, -shiftY);
+		List<Plane> planes = gameState.getPlanes();
+		for (Plane plane : planes) {
+			int enemyYOffset = plane.getY() - player.getProgressY();
+			int shiftX = plane.getX();
+			int shiftY = mySize.height - Config.ENEMY_SIZE_PX.height / 2 - enemyYOffset;
+			g.translate(shiftX, shiftY);
+			Sprites.paintEnemy(g, plane);
+			g.translate(-shiftX, -shiftY);
+		}
 	}
 
 	private void paintPlayer(Graphics g) {

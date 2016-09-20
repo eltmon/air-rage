@@ -96,7 +96,15 @@ public class Player implements GameObject {
 
 	@Override
 	public void updateState(int frameIndex) {
+
+		// TODO Maybe this belongs with the global game state instead of in the player, since it triggers events
+		// external to the player.
 		this.progressY += Player.PROGRESS_SPEED;
+
+		// TODO Externalize this trigger
+		if (progressY == 200) {
+			Formations.fingerFour(gameState);
+		}
 
 		if (moveUpIntent) {
 			moveUp();
@@ -115,7 +123,6 @@ public class Player implements GameObject {
 				fireGuns();
 			}
 		}
-
 	}
 
 	private void moveUp() {
@@ -152,8 +159,8 @@ public class Player implements GameObject {
 		// TODO Remove hardcodes, and the coords should be the missile centroids
 		// Also player coords need to be centroid as well
 		int missileY = getY() + PLAYER_SIZE_PX.height - 24;
-		gameState.addPlayerMissile(new PlayerMissile(x + 7, missileY, 300));
-		gameState.addPlayerMissile(new PlayerMissile(x + 45, missileY, 300));
+		gameState.addPlayerMissile(new PlayerMissile(x + 7, missileY));
+		gameState.addPlayerMissile(new PlayerMissile(x + 45, missileY));
 
 		GameEvent event = new GameEvent(GameEvent.PLAYER_FIRED);
 		gameState.fireGameEvent(event);

@@ -5,6 +5,7 @@ package com.williewheeler.airrage.model;
  */
 public class PlayerMissile implements GameObject {
 	private static final int SPEED = 15;
+	private static final int TTL = 300;
 
 	// x coord of the center of the missile
 	private int x;
@@ -15,10 +16,10 @@ public class PlayerMissile implements GameObject {
 	private int ttl;
 
 	// TODO Add direction vector
-	public PlayerMissile(int x, int y, int ttl) {
+	public PlayerMissile(int x, int y) {
 		this.x = x;
 		this.y = y;
-		this.ttl = ttl;
+		this.ttl = TTL;
 	}
 
 	@Override

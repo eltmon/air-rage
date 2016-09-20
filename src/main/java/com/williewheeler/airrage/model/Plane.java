@@ -4,6 +4,8 @@ package com.williewheeler.airrage.model;
  * Created by willie on 9/18/16.
  */
 public class Plane implements GameObject {
+	private static final int SPEED = 2;
+
 	private int x;
 	private int y;
 
@@ -11,6 +13,10 @@ public class Plane implements GameObject {
 	 * In radians. 0 degrees is north.
 	 */
 	private double rotation;
+
+	public Plane(int x, int y) {
+		this(x, y, Math.PI);
+	}
 
 	public Plane(int x, int y, double rotation) {
 		this.x = x;
@@ -44,6 +50,6 @@ public class Plane implements GameObject {
 
 	@Override
 	public void updateState(int frameIndex) {
-		this.y -= 2;
+		this.y -= SPEED;
 	}
 }
