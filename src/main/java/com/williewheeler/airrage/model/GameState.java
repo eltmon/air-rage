@@ -97,7 +97,7 @@ public class GameState {
 
 	private void fireTriggers() {
 		Queue<Trigger> triggers = level.getTriggers();
-		if (triggers.peek().canFire(this)) {
+		if (triggers.peek() != null && triggers.peek().canFire(this)) {
 			Trigger trigger = triggers.poll();
 			trigger.fireTrigger(this);
 		}
