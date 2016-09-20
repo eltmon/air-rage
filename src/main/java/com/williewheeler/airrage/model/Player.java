@@ -104,6 +104,18 @@ public class Player implements GameObject {
 		// TODO Externalize this trigger
 		if (progressY == 200) {
 			Formations.fingerFour(gameState);
+		} else if (progressY == 700) {
+			Formations.battleSpread(gameState);
+		} else if (progressY == 1200) {
+			Formations.fluidTwo(gameState);
+		} else if (progressY == 1700) {
+			Formations.trail(gameState);
+		} else if (progressY == 2200) {
+			Formations.eschelon(gameState);
+		} else if (progressY == 2700) {
+			Formations.fluidFour(gameState);
+		} else if (progressY == 3200) {
+			Formations.box(gameState);
 		}
 
 		if (moveUpIntent) {
