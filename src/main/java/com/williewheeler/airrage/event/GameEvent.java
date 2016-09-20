@@ -5,6 +5,7 @@ package com.williewheeler.airrage.event;
  */
 public class GameEvent {
 	public static final String PLAYER_FIRED = "playerFired";
+	public static final String ENEMY_DOWNED = "enemyDowned";
 
 	private String type;
 

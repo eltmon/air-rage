@@ -41,7 +41,7 @@ public class AudioManager {
 	private void initSoundEffects(int clipsPerId) {
 		// TODO Lazy load
 		String[] ids = {
-				"airplane+spita", "gunfire"
+				"airplane+spita", "gunfire", "explosion", "explosion-bass"
 		};
 		// TODO Make this more generic, such as automatically loading all wavs in some directory or manifest. [WLW]
 		for (String id : ids) {

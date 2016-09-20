@@ -63,6 +63,7 @@ public class GameState {
 	 * Advance the game state forward one frame.
 	 */
 	public void updateState() {
+		checkForDownedEnemies();
 		player.updateState(frameIndex);
 		updateEnemies();
 		updateMissiles();
@@ -73,6 +74,23 @@ public class GameState {
 	void fireGameEvent(GameEvent event) {
 		for (GameListener listener : gameListeners) {
 			listener.handleGameEvent(event);
+		}
+	}
+
+	private void checkForDownedEnemies() {
+		ListIterator<PlayerMissile> missileIt = playerMissiles.listIterator();
+		while (missileIt.hasNext()) {
+			PlayerMissile missile = missileIt.next();
+			ListIterator<Plane> planeIt = planes.listIterator();
+			while (planeIt.hasNext()) {
+				Plane plane = planeIt.next();
+				boolean collision = Collisions.collision(missile, plane);
+				if (collision) {
+					missileIt.remove();
+					planeIt.remove();
+					fireGameEvent(new GameEvent(GameEvent.ENEMY_DOWNED));
+				}
+			}
 		}
 	}
 
