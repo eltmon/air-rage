@@ -56,6 +56,12 @@ public class Player implements GameObject {
 		return progressY + yOffset;
 	}
 
+	@Override
+	public int getWidth() { return PLAYER_SIZE_PX.width; }
+
+	@Override
+	public int getHeight() { return PLAYER_SIZE_PX.height; }
+
 	public int getProgressY() {
 		return progressY;
 	}

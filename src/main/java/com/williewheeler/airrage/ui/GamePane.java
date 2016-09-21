@@ -4,6 +4,8 @@ import com.williewheeler.airrage.Config;
 import com.williewheeler.airrage.model.*;
 import com.williewheeler.airrage.model.level.Level;
 import com.williewheeler.airrage.model.level.Tiles;
+import com.williewheeler.airrage.ui.renderer.*;
+import com.williewheeler.airrage.ui.renderer.Renderer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,6 +24,15 @@ public class GamePane extends JComponent {
 
 	private GameState gameState;
 
+	// Tiles
+	private Renderer grassTileRenderer = new TileRenderer(new Color(154, 212, 68));
+	private Renderer seaTileRenderer = new TileRenderer(new Color(42, 135, 181));
+
+	// Game objects
+	private Renderer playerRenderer = new ImageRenderer(Sprites.A6M_ZERO);
+	private Renderer enemyPlaneRenderer = new ImageRenderer(Sprites.F6F_HELLCAT);
+	private Renderer missileRenderer = new MissileRenderer();
+
 	public GamePane(GameState gameState) {
 		this.gameState = gameState;
 	}
@@ -29,7 +40,7 @@ public class GamePane extends JComponent {
 	@Override
 	public void paint(Graphics g) {
 		paintTiles(g);
-		paintEnemies(g);
+		paintEnemyPlanes(g);
 		paintPlayer(g);
 		paintPlayerMissiles(g);
 	}
@@ -67,10 +78,10 @@ public class GamePane extends JComponent {
 				int tile = gameMap[i][j];
 				switch (tile) {
 					case Tiles.LAND:
-						Sprites.paintLand(g);
+						grassTileRenderer.paint(g, null);
 						break;
 					case Tiles.SEA:
-						Sprites.paintSea(g);
+						seaTileRenderer.paint(g, null);
 						break;
 				}
 				g.translate(-tileScreenX, -tileScreenY);
@@ -78,48 +89,39 @@ public class GamePane extends JComponent {
 		}
 	}
 
-	private void paintEnemies(Graphics g) {
-		Player player = gameState.getPlayer();
-		Dimension mySize = getSize();
-		int playerYOffset = player.getYOffset();
+	private void paintEnemyPlanes(Graphics g) {
 		List<Plane> planes = gameState.getPlanes();
 		for (Plane plane : planes) {
-			int enemyYOffset = plane.getY() - player.getProgressY();
-			int shiftX = plane.getX();
-			int shiftY = mySize.height - Config.ENEMY_SIZE_PX.height / 2 - enemyYOffset;
-			g.translate(shiftX, shiftY);
-			Sprites.paintEnemy(g, plane);
-			g.translate(-shiftX, -shiftY);
+			paint(g, plane, enemyPlaneRenderer);
 		}
 	}
 
 	private void paintPlayer(Graphics g) {
-		Player player = gameState.getPlayer();
-		Dimension mySize = getSize();
-		int playerYOffset = player.getYOffset();
-		int yOffset = mySize.height - Player.PLAYER_SIZE_PX.height - playerYOffset;
-		g.translate(player.getX(), yOffset);
-		Sprites.paintPlayer(g);
-		g.translate(-player.getX(), -yOffset);
+		paint(g, gameState.getPlayer(), playerRenderer);
 	}
 
 	private void paintPlayerMissiles(Graphics g) {
-		Player player = gameState.getPlayer();
-		Dimension mySize = getSize();
 		List<PlayerMissile> missiles = gameState.getPlayerMissiles();
 		for (PlayerMissile missile : missiles) {
-			int missileYOffset = missile.getY() - player.getProgressY();
-			int shiftX = missile.getX();
-			int shiftY = mySize.height - 10 - missileYOffset;
-			g.translate(shiftX, shiftY);
-
-			g.setColor(Color.RED);
-			g.fillOval(0, 0, 9, 14);
-
-			g.setColor(Color.ORANGE);
-			g.fillOval(2, 2, 5, 10);
-
-			g.translate(-shiftX, - shiftY);
+			paint(g, missile, missileRenderer);
 		}
+	}
+
+	private void paint(Graphics g, GameObject gameObject, Renderer renderer) {
+
+		// TODO We will want to this into the renderer, because we'll need to rotate the image around the game object
+		// centroid. [WLW]
+
+		Dimension mySize = getSize();
+		Player player = gameState.getPlayer();
+
+		int shiftX = gameObject.getX();
+
+		int offsetY = gameObject.getY() - player.getProgressY();
+		int shiftY = mySize.height - gameObject.getHeight() - offsetY;
+
+		g.translate(shiftX, shiftY);
+		renderer.paint(g, gameObject);
+		g.translate(-shiftX, -shiftY);
 	}
 }

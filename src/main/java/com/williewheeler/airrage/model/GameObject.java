@@ -9,6 +9,10 @@ public interface GameObject {
 
 	int getY();
 
+	int getWidth();
+
+	int getHeight();
+
 	double getRotation();
 
 	int getTtl();

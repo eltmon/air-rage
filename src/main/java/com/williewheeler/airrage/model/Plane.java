@@ -1,9 +1,13 @@
 package com.williewheeler.airrage.model;
 
+import java.awt.*;
+
 /**
  * Created by willie on 9/18/16.
  */
 public class Plane implements GameObject {
+	public static final Dimension ENEMY_SIZE_PX = new Dimension(64, 64);
+
 	private static final int SPEED = 2;
 
 	private int x;
@@ -33,6 +37,12 @@ public class Plane implements GameObject {
 	public int getY() {
 		return y;
 	}
+
+	@Override
+	public int getWidth() { return ENEMY_SIZE_PX.width; }
+
+	@Override
+	public int getHeight() { return ENEMY_SIZE_PX.height; }
 
 	@Override
 	public double getRotation() {

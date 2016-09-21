@@ -33,6 +33,12 @@ public class PlayerMissile implements GameObject {
 	}
 
 	@Override
+	public int getWidth() { return 9; }
+
+	@Override
+	public int getHeight() { return 14; }
+
+	@Override
 	public double getRotation() {
 		return 0.0;
 	}
