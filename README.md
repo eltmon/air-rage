@@ -1,5 +1,7 @@
 # air-rage
 
+![docs/ss.png]
+
 To run:
 
     ./gradlew run
