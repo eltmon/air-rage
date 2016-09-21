@@ -86,6 +86,7 @@ public class GameState {
 	 * Advance the game state forward one frame.
 	 */
 	public void updateState() {
+		checkForDownedPlayer();
 		checkForDownedEnemies();
 		player.updateState(frameIndex);
 		updatePlayerMissiles();
@@ -93,6 +94,17 @@ public class GameState {
 		updateEnemyMissiles();
 		fireTriggers();
 		this.frameIndex = (frameIndex + 1) % Config.TARGET_FPS;
+	}
+
+	private void checkForDownedPlayer() {
+		ListIterator<EnemyMissile> missileIt = enemyMissiles.listIterator();
+		while (missileIt.hasNext()) {
+			EnemyMissile missile = missileIt.next();
+			boolean collision = Collisions.collision(missile, player);
+			if (collision) {
+				player.setDowned(true);
+			}
+		}
 	}
 
 	private void checkForDownedEnemies() {

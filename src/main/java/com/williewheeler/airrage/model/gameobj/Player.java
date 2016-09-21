@@ -32,11 +32,15 @@ public class Player implements GameObject {
 	/** This is the micro y */
 	private int yOffset;
 
+	private double rotation = 0.0;
+
 	private boolean moveUpIntent;
 	private boolean moveDownIntent;
 	private boolean moveLeftIntent;
 	private boolean moveRightIntent;
 	private boolean fireIntent;
+
+	private boolean downed = false;
 
 	public Player(GameState gameState) {
 		this.gameState = gameState;
@@ -71,7 +75,7 @@ public class Player implements GameObject {
 
 	@Override
 	public double getRotation() {
-		return 0;
+		return rotation;
 	}
 
 	@Override
@@ -99,6 +103,10 @@ public class Player implements GameObject {
 		this.fireIntent = fireIntent;
 	}
 
+	public void setDowned(boolean downed) {
+		this.downed = downed;
+	}
+
 	@Override
 	public void updateState(int frameIndex) {
 
@@ -106,21 +114,25 @@ public class Player implements GameObject {
 		// external to the player.
 		this.progressY += Player.PROGRESS_SPEED;
 
-		if (moveUpIntent) {
-			moveUp();
-		}
-		if (moveDownIntent) {
-			moveDown();
-		}
-		if (moveLeftIntent) {
-			moveLeft();
-		}
-		if (moveRightIntent) {
-			moveRight();
-		}
-		if (fireIntent) {
-			if (frameIndex % FIRE_PERIOD == 0) {
-				fireGuns();
+		if (downed) {
+			rotation += 0.1;
+		} else {
+			if (moveUpIntent) {
+				moveUp();
+			}
+			if (moveDownIntent) {
+				moveDown();
+			}
+			if (moveLeftIntent) {
+				moveLeft();
+			}
+			if (moveRightIntent) {
+				moveRight();
+			}
+			if (fireIntent) {
+				if (frameIndex % FIRE_PERIOD == 0) {
+					fireGuns();
+				}
 			}
 		}
 	}
