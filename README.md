@@ -1,6 +1,6 @@
-# air-rage
+![Screenshot](docs/ss.png)
 
-![docs/ss.png]
+# air-rage
 
 To run:
 
