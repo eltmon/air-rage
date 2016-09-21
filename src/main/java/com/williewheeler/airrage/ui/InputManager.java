@@ -1,4 +1,4 @@
-package com.williewheeler.airrage.ui.input;
+package com.williewheeler.airrage.ui;
 
 import com.williewheeler.airrage.model.GameState;
 import com.williewheeler.airrage.model.Player;

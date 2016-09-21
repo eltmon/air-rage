@@ -5,7 +5,7 @@ import com.williewheeler.airrage.event.GameListener;
 import com.williewheeler.airrage.model.GameState;
 import com.williewheeler.airrage.model.level.Levels;
 import com.williewheeler.airrage.ui.GamePane;
-import com.williewheeler.airrage.ui.input.InputManager;
+import com.williewheeler.airrage.ui.InputManager;
 import com.williewheeler.airrage.ui.audio.AudioLoader;
 import com.williewheeler.airrage.ui.audio.AudioManager;
 import org.slf4j.Logger;
