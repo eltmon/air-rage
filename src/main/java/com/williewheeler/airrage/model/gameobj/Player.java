@@ -1,11 +1,10 @@
-package com.williewheeler.airrage.model;
+package com.williewheeler.airrage.model.gameobj;
 
 import com.williewheeler.airrage.Config;
 import com.williewheeler.airrage.event.GameEvent;
+import com.williewheeler.airrage.model.GameState;
 
 import java.awt.*;
-
-import static com.williewheeler.airrage.Config.TARGET_FPS;
 
 /**
  * Created by willie on 9/18/16.
@@ -21,8 +20,8 @@ public class Player implements GameObject {
 	private static final int MAX_PLAYER_Y_OFFSET = 400;
 
 	/** Fire period in frames. */
-	private static final int PLAYER_FIRE_PERIOD = TARGET_FPS / 10;
-//	private static final int PLAYER_FIRE_PERIOD = 1;
+	private static final int FIRE_PERIOD = Config.TARGET_FPS / 10;
+//	private static final int FIRE_PERIOD = 1;
 
 	private GameState gameState;
 	private int x;
@@ -120,7 +119,7 @@ public class Player implements GameObject {
 			moveRight();
 		}
 		if (fireIntent) {
-			if (frameIndex % PLAYER_FIRE_PERIOD == 0) {
+			if (frameIndex % FIRE_PERIOD == 0) {
 				fireGuns();
 			}
 		}

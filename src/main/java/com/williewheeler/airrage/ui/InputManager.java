@@ -1,7 +1,7 @@
 package com.williewheeler.airrage.ui;
 
 import com.williewheeler.airrage.model.GameState;
-import com.williewheeler.airrage.model.Player;
+import com.williewheeler.airrage.model.gameobj.Player;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;

@@ -1,6 +1,8 @@
 package com.williewheeler.airrage.model;
 
 import com.williewheeler.airrage.Config;
+import com.williewheeler.airrage.model.gameobj.EnemyPlane;
+import com.williewheeler.airrage.model.gameobj.Player;
 
 // http://www.combataircraft.com/en/Formations/
 
@@ -14,10 +16,10 @@ public class Formations {
 		int progressY = player.getProgressY();
 		int topY = progressY + Config.VIEWPORT_SIZE_PX.height;
 
-		gameState.addPlane(new Plane(300, topY));
-		gameState.addPlane(new Plane(400, topY));
-		gameState.addPlane(new Plane(500, topY));
-		gameState.addPlane(new Plane(600, topY));
+		gameState.addEnemyPlane(new EnemyPlane(gameState, 300, topY));
+		gameState.addEnemyPlane(new EnemyPlane(gameState, 400, topY));
+		gameState.addEnemyPlane(new EnemyPlane(gameState, 500, topY));
+		gameState.addEnemyPlane(new EnemyPlane(gameState, 600, topY));
 	}
 
 	// Finger-four, aka fingertip
@@ -27,15 +29,10 @@ public class Formations {
 		int progressY = player.getProgressY();
 		int topY = progressY + Config.VIEWPORT_SIZE_PX.height;
 
-		Plane flightLeader = new Plane(400, topY);
-		Plane flightWingman = new Plane(500, topY + 80);
-		Plane elementLeader = new Plane(300, topY + 80);
-		Plane elementWingman = new Plane(200, topY + 160);
-
-		gameState.addPlane(flightLeader);
-		gameState.addPlane(flightWingman);
-		gameState.addPlane(elementLeader);
-		gameState.addPlane(elementWingman);
+		gameState.addEnemyPlane(new EnemyPlane(gameState, 400, topY));
+		gameState.addEnemyPlane(new EnemyPlane(gameState, 500, topY + 80));
+		gameState.addEnemyPlane(new EnemyPlane(gameState, 300, topY + 80));
+		gameState.addEnemyPlane(new EnemyPlane(gameState, 200, topY + 160));
 	}
 
 	public static void fluidTwo(GameState gameState) {
@@ -43,8 +40,8 @@ public class Formations {
 		int progressY = player.getProgressY();
 		int topY = progressY + Config.VIEWPORT_SIZE_PX.height;
 
-		gameState.addPlane(new Plane(400, topY));
-		gameState.addPlane(new Plane(600, topY));
+		gameState.addEnemyPlane(new EnemyPlane(gameState, 400, topY));
+		gameState.addEnemyPlane(new EnemyPlane(gameState, 600, topY));
 	}
 
 	public static void trail(GameState gameState) {
@@ -52,9 +49,9 @@ public class Formations {
 		int progressY = player.getProgressY();
 		int topY = progressY + Config.VIEWPORT_SIZE_PX.height;
 
-		gameState.addPlane(new Plane(400, topY));
-		gameState.addPlane(new Plane(400, topY + 80));
-		gameState.addPlane(new Plane(400, topY + 160));
+		gameState.addEnemyPlane(new EnemyPlane(gameState, 400, topY));
+		gameState.addEnemyPlane(new EnemyPlane(gameState, 400, topY + 80));
+		gameState.addEnemyPlane(new EnemyPlane(gameState, 400, topY + 160));
 	}
 
 	// TODO Wall, but looks like a battle spread?
@@ -65,10 +62,10 @@ public class Formations {
 		int progressY = player.getProgressY();
 		int topY = progressY + Config.VIEWPORT_SIZE_PX.height;
 
-		gameState.addPlane(new Plane(600, topY));
-		gameState.addPlane(new Plane(520, topY + 80));
-		gameState.addPlane(new Plane(440, topY + 160));
-		gameState.addPlane(new Plane(360, topY + 240));
+		gameState.addEnemyPlane(new EnemyPlane(gameState, 600, topY));
+		gameState.addEnemyPlane(new EnemyPlane(gameState, 520, topY + 80));
+		gameState.addEnemyPlane(new EnemyPlane(gameState, 440, topY + 160));
+		gameState.addEnemyPlane(new EnemyPlane(gameState, 360, topY + 240));
 	}
 
 	public static void fluidFour(GameState gameState) {
@@ -76,10 +73,10 @@ public class Formations {
 		int progressY = player.getProgressY();
 		int topY = progressY + Config.VIEWPORT_SIZE_PX.height;
 
-		gameState.addPlane(new Plane(300, topY + 80));
-		gameState.addPlane(new Plane(400, topY));
-		gameState.addPlane(new Plane(500, topY));
-		gameState.addPlane(new Plane(600, topY + 80));
+		gameState.addEnemyPlane(new EnemyPlane(gameState, 300, topY + 80));
+		gameState.addEnemyPlane(new EnemyPlane(gameState, 400, topY));
+		gameState.addEnemyPlane(new EnemyPlane(gameState, 500, topY));
+		gameState.addEnemyPlane(new EnemyPlane(gameState, 600, topY + 80));
 	}
 
 	// TODO Route
@@ -91,9 +88,9 @@ public class Formations {
 		int progressY = player.getProgressY();
 		int topY = progressY + Config.VIEWPORT_SIZE_PX.height;
 
-		gameState.addPlane(new Plane(400, topY));
-		gameState.addPlane(new Plane(400, topY + 160));
-		gameState.addPlane(new Plane(600, topY));
-		gameState.addPlane(new Plane(600, topY + 160));
+		gameState.addEnemyPlane(new EnemyPlane(gameState, 400, topY));
+		gameState.addEnemyPlane(new EnemyPlane(gameState, 400, topY + 160));
+		gameState.addEnemyPlane(new EnemyPlane(gameState, 600, topY));
+		gameState.addEnemyPlane(new EnemyPlane(gameState, 600, topY + 160));
 	}
 }

@@ -1,11 +1,14 @@
 package com.williewheeler.airrage.ui;
 
 import com.williewheeler.airrage.Config;
-import com.williewheeler.airrage.model.*;
+import com.williewheeler.airrage.model.GameState;
+import com.williewheeler.airrage.model.gameobj.*;
 import com.williewheeler.airrage.model.level.Level;
 import com.williewheeler.airrage.model.level.Tiles;
-import com.williewheeler.airrage.ui.renderer.*;
+import com.williewheeler.airrage.ui.renderer.ImageRenderer;
+import com.williewheeler.airrage.ui.renderer.MissileRenderer;
 import com.williewheeler.airrage.ui.renderer.Renderer;
+import com.williewheeler.airrage.ui.renderer.TileRenderer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,8 +33,9 @@ public class GamePane extends JComponent {
 
 	// Game objects
 	private Renderer playerRenderer = new ImageRenderer(Sprites.A6M_ZERO);
+	private Renderer playerMissileRenderer = new MissileRenderer(Color.RED, Color.ORANGE);
 	private Renderer enemyPlaneRenderer = new ImageRenderer(Sprites.F6F_HELLCAT);
-	private Renderer missileRenderer = new MissileRenderer();
+	private Renderer enemyMissileRenderer = new MissileRenderer(Color.BLUE, Color.WHITE);
 
 	public GamePane(GameState gameState) {
 		this.gameState = gameState;
@@ -42,6 +46,7 @@ public class GamePane extends JComponent {
 		paintTiles(g);
 		paintEnemyPlanes(g);
 		paintPlayer(g);
+		paintEnemyMissiles(g);
 		paintPlayerMissiles(g);
 	}
 
@@ -90,8 +95,8 @@ public class GamePane extends JComponent {
 	}
 
 	private void paintEnemyPlanes(Graphics g) {
-		List<Plane> planes = gameState.getPlanes();
-		for (Plane plane : planes) {
+		List<EnemyPlane> planes = gameState.getEnemyPlanes();
+		for (EnemyPlane plane : planes) {
 			paint(g, plane, enemyPlaneRenderer);
 		}
 	}
@@ -100,10 +105,17 @@ public class GamePane extends JComponent {
 		paint(g, gameState.getPlayer(), playerRenderer);
 	}
 
+	private void paintEnemyMissiles(Graphics g) {
+		List<EnemyMissile> missiles = gameState.getEnemyMissiles();
+		for (EnemyMissile missile : missiles) {
+			paint(g, missile, enemyMissileRenderer);
+		}
+	}
+
 	private void paintPlayerMissiles(Graphics g) {
 		List<PlayerMissile> missiles = gameState.getPlayerMissiles();
 		for (PlayerMissile missile : missiles) {
-			paint(g, missile, missileRenderer);
+			paint(g, missile, playerMissileRenderer);
 		}
 	}
 

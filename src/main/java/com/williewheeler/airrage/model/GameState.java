@@ -3,6 +3,10 @@ package com.williewheeler.airrage.model;
 import com.williewheeler.airrage.Config;
 import com.williewheeler.airrage.event.GameEvent;
 import com.williewheeler.airrage.event.GameListener;
+import com.williewheeler.airrage.model.gameobj.EnemyMissile;
+import com.williewheeler.airrage.model.gameobj.EnemyPlane;
+import com.williewheeler.airrage.model.gameobj.Player;
+import com.williewheeler.airrage.model.gameobj.PlayerMissile;
 import com.williewheeler.airrage.model.level.Level;
 import com.williewheeler.airrage.model.trigger.Trigger;
 import org.slf4j.Logger;
@@ -24,8 +28,9 @@ public class GameState {
 	private Player player;
 	private Level level;
 
-	private List<Plane> planes = new LinkedList<>();
-	private List<PlayerMissile> playerMissiles = new LinkedList<>();
+	private final List<PlayerMissile> playerMissiles = new LinkedList<>();
+	private final List<EnemyPlane> enemyPlanes = new LinkedList<>();
+	private final List<EnemyMissile> enemyMissiles = new LinkedList<>();
 
 	private int frameIndex;
 
@@ -47,9 +52,13 @@ public class GameState {
 		return level;
 	}
 
-	public List<Plane> getPlanes() { return planes; }
+	public List<EnemyPlane> getEnemyPlanes() {
+		return enemyPlanes;
+	}
 
-	public void addPlane(Plane plane) { planes.add(plane); }
+	public void addEnemyPlane(EnemyPlane plane) {
+		enemyPlanes.add(plane);
+	}
 
 	public List<PlayerMissile> getPlayerMissiles() {
 		return playerMissiles;
@@ -59,31 +68,40 @@ public class GameState {
 		playerMissiles.add(missile);
 	}
 
+	public List<EnemyMissile> getEnemyMissiles() {
+		return enemyMissiles;
+	}
+
+	public void addEnemyMissile(EnemyMissile missile) {
+		enemyMissiles.add(missile);
+	}
+
+	public void fireGameEvent(GameEvent event) {
+		for (GameListener listener : gameListeners) {
+			listener.handleGameEvent(event);
+		}
+	}
+
 	/**
 	 * Advance the game state forward one frame.
 	 */
 	public void updateState() {
 		checkForDownedEnemies();
 		player.updateState(frameIndex);
+		updatePlayerMissiles();
 		updateEnemies();
-		updateMissiles();
+		updateEnemyMissiles();
 		fireTriggers();
 		this.frameIndex = (frameIndex + 1) % Config.TARGET_FPS;
-	}
-
-	void fireGameEvent(GameEvent event) {
-		for (GameListener listener : gameListeners) {
-			listener.handleGameEvent(event);
-		}
 	}
 
 	private void checkForDownedEnemies() {
 		ListIterator<PlayerMissile> missileIt = playerMissiles.listIterator();
 		while (missileIt.hasNext()) {
 			PlayerMissile missile = missileIt.next();
-			ListIterator<Plane> planeIt = planes.listIterator();
+			ListIterator<EnemyPlane> planeIt = enemyPlanes.listIterator();
 			while (planeIt.hasNext()) {
-				Plane plane = planeIt.next();
+				EnemyPlane plane = planeIt.next();
 				boolean collision = Collisions.collision(missile, plane);
 				if (collision) {
 					missileIt.remove();
@@ -94,20 +112,31 @@ public class GameState {
 		}
 	}
 
-	private void updateEnemies() {
-		ListIterator<Plane> it = planes.listIterator();
-		while (it.hasNext()) {
-			Plane plane = it.next();
-			plane.updateState(frameIndex);
-		}
-	}
-
-	private void updateMissiles() {
+	private void updatePlayerMissiles() {
 		ListIterator<PlayerMissile> it = playerMissiles.listIterator();
 		while (it.hasNext()) {
 			PlayerMissile missile = it.next();
 			missile.updateState(frameIndex);
-			if (missile.getTtl() == 0) {
+			if (missile.getTtl() <= 0) {
+				it.remove();
+			}
+		}
+	}
+
+	private void updateEnemies() {
+		ListIterator<EnemyPlane> it = enemyPlanes.listIterator();
+		while (it.hasNext()) {
+			EnemyPlane plane = it.next();
+			plane.updateState(frameIndex);
+		}
+	}
+
+	private void updateEnemyMissiles() {
+		ListIterator<EnemyMissile> it = enemyMissiles.listIterator();
+		while (it.hasNext()) {
+			EnemyMissile missile = it.next();
+			missile.updateState(frameIndex);
+			if (missile.getTtl() <= 0) {
 				it.remove();
 			}
 		}

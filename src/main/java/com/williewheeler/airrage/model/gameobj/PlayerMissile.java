@@ -1,4 +1,4 @@
-package com.williewheeler.airrage.model;
+package com.williewheeler.airrage.model.gameobj;
 
 /**
  * Created by willie on 9/14/16.

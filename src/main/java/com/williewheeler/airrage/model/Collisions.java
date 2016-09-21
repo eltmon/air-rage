@@ -1,5 +1,7 @@
 package com.williewheeler.airrage.model;
 
+import com.williewheeler.airrage.model.gameobj.GameObject;
+
 /**
  * Created by willie on 9/19/16.
  */

@@ -1,6 +1,6 @@
 package com.williewheeler.airrage.ui.renderer;
 
-import com.williewheeler.airrage.model.GameObject;
+import com.williewheeler.airrage.model.gameobj.GameObject;
 
 import java.awt.*;
 
