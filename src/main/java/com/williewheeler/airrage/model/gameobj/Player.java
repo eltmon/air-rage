@@ -155,12 +155,9 @@ public class Player implements GameObject {
 	}
 
 	private void fireGuns() {
-
-		// TODO Remove hardcodes, and the coords should be the missile centroids
-		// Also player coords need to be centroid as well
-		int missileY = getY() + PLAYER_SIZE_PX.height - 24;
-		gameState.addPlayerMissile(new PlayerMissile(x + 7, missileY));
-		gameState.addPlayerMissile(new PlayerMissile(x + 45, missileY));
+		int missileY = getY() + 12;
+		gameState.addPlayerMissile(new PlayerMissile(x - 21, missileY));
+		gameState.addPlayerMissile(new PlayerMissile(x + 19, missileY));
 
 		GameEvent event = new GameEvent(GameEvent.PLAYER_FIRED);
 		gameState.fireGameEvent(event);

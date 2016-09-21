@@ -5,7 +5,8 @@ import com.williewheeler.airrage.model.gameobj.GameObject;
 
 import java.awt.*;
 
-// FIXME Not really a game object...
+// FIXME Not really a game object. We may want to treat tiles differently than game objects
+// in that rotation isn't an issue here, so we may want to avoid all the unnecessary translation.
 
 /**
  * Created by willie on 9/20/16.
@@ -18,8 +19,8 @@ public class TileRenderer implements Renderer {
 	}
 
 	@Override
-	public void paint(Graphics g, GameObject gameObject) {
-		g.setColor(color);
-		g.fillRect(0, 0, Config.TILE_SIZE_PX.width, Config.TILE_SIZE_PX.height);
+	public void paint(Graphics2D g2, GameObject gameObject) {
+		g2.setColor(color);
+		g2.fillRect(0, 0, Config.TILE_SIZE_PX.width, Config.TILE_SIZE_PX.height);
 	}
 }

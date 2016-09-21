@@ -75,10 +75,8 @@ public class EnemyPlane implements GameObject {
 	}
 
 	private void fireGuns() {
-		// TODO Remove hardcodes, and the coords should be the missile centroids
-		// Also player coords need to be centroid as well
-		int missileY = getY() + ENEMY_SIZE_PX.height + 24;
-		gameState.addEnemyMissile(new EnemyMissile(x + 7, missileY));
-		gameState.addEnemyMissile(new EnemyMissile(x + 45, missileY));
+		int missileY = getY() - 16;
+		gameState.addEnemyMissile(new EnemyMissile(x - 20, missileY));
+		gameState.addEnemyMissile(new EnemyMissile(x + 20, missileY));
 	}
 }

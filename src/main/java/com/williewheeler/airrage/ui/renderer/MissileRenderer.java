@@ -17,11 +17,11 @@ public class MissileRenderer implements Renderer {
 	}
 
 	@Override
-	public void paint(Graphics g, GameObject gameObject) {
-		g.setColor(outerColor);
-		g.fillOval(0, 0, 9, 14);
+	public void paint(Graphics2D g2, GameObject gameObject) {
+		g2.setColor(outerColor);
+		g2.fillOval(0, 0, 9, 14);
 
-		g.setColor(innerColor);
-		g.fillOval(2, 2, 5, 10);
+		g2.setColor(innerColor);
+		g2.fillOval(2, 2, 5, 10);
 	}
 }

@@ -16,10 +16,13 @@ public class ImageRenderer implements Renderer {
 	}
 
 	@Override
-	public void paint(Graphics g, GameObject gameObject) {
+	public void paint(Graphics2D g2, GameObject gameObject) {
+		int halfWidth = gameObject.getWidth() / 2;
+		int halfHeight = gameObject.getHeight() / 2;
+
 		AffineTransform xform = new AffineTransform();
-		xform.rotate(gameObject.getRotation());
-		Graphics2D g2 = (Graphics2D) g;
+		xform.rotate(gameObject.getRotation(), halfWidth, halfHeight);
+
 		g2.drawImage(image, xform, null);
 	}
 }

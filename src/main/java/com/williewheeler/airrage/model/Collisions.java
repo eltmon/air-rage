@@ -13,6 +13,6 @@ public class Collisions {
 		int xDiff = o1.getX() - o2.getX();
 		int yDiff = o1.getY() - o2.getY();
 		double dist = Math.sqrt(xDiff * xDiff + yDiff * yDiff);
-		return dist < 50;
+		return dist < 32;
 	}
 }

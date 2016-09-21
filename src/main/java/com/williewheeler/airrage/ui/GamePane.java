@@ -51,6 +51,7 @@ public class GamePane extends JComponent {
 	}
 
 	private void paintTiles(Graphics g) {
+		Graphics2D g2 = (Graphics2D) g;
 		Player player = gameState.getPlayer();
 		int progressY = player.getProgressY();
 
@@ -83,10 +84,10 @@ public class GamePane extends JComponent {
 				int tile = gameMap[i][j];
 				switch (tile) {
 					case Tiles.LAND:
-						grassTileRenderer.paint(g, null);
+						grassTileRenderer.paint(g2, null);
 						break;
 					case Tiles.SEA:
-						seaTileRenderer.paint(g, null);
+						seaTileRenderer.paint(g2, null);
 						break;
 				}
 				g.translate(-tileScreenX, -tileScreenY);
@@ -120,20 +121,15 @@ public class GamePane extends JComponent {
 	}
 
 	private void paint(Graphics g, GameObject gameObject, Renderer renderer) {
-
-		// TODO We will want to this into the renderer, because we'll need to rotate the image around the game object
-		// centroid. [WLW]
-
 		Dimension mySize = getSize();
-		Player player = gameState.getPlayer();
+		int progressY = gameState.getPlayer().getProgressY();
+		int yOffset = gameObject.getY() - progressY;
 
-		int shiftX = gameObject.getX();
-
-		int offsetY = gameObject.getY() - player.getProgressY();
-		int shiftY = mySize.height - gameObject.getHeight() - offsetY;
+		int shiftX = gameObject.getX() - gameObject.getWidth() / 2;
+		int shiftY = mySize.height - yOffset - gameObject.getHeight() / 2;
 
 		g.translate(shiftX, shiftY);
-		renderer.paint(g, gameObject);
+		renderer.paint((Graphics2D) g, gameObject);
 		g.translate(-shiftX, -shiftY);
 	}
 }

@@ -9,5 +9,11 @@ import java.awt.*;
  */
 public interface Renderer {
 
-	void paint(Graphics g, GameObject gameObject);
+	/**
+	 * We expect the graphics context to be translated to the NW corner of the game object.
+	 *
+	 * @param g2
+	 * @param gameObject
+	 */
+	void paint(Graphics2D g2, GameObject gameObject);
 }
