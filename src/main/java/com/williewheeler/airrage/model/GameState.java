@@ -1,6 +1,7 @@
 package com.williewheeler.airrage.model;
 
 import com.williewheeler.airrage.Config;
+import com.williewheeler.airrage.GameUtil;
 import com.williewheeler.airrage.event.GameEvent;
 import com.williewheeler.airrage.event.GameListener;
 import com.williewheeler.airrage.model.gameobj.EnemyMissile;
@@ -117,8 +118,13 @@ public class GameState {
 				boolean collision = Collisions.collision(missile, plane);
 				if (collision) {
 					missileIt.remove();
-					planeIt.remove();
-					fireGameEvent(new GameEvent(GameEvent.ENEMY_DOWNED));
+					int stateFlags = plane.getStateFlags();
+					stateFlags |= EnemyPlane.STATE_DAMAGED;
+					if (GameUtil.random().nextDouble() < 0.05) {
+						stateFlags |= EnemyPlane.STATE_SPINNING;
+					}
+					plane.setStateFlags(stateFlags);
+					fireGameEvent(new GameEvent(GameEvent.ENEMY_HIT));
 				}
 			}
 		}

@@ -115,6 +115,19 @@ public class GamePane extends JComponent {
 
 	private void paintPlayerMissiles(Graphics g) {
 		List<PlayerMissile> missiles = gameState.getPlayerMissiles();
+		// FIXME This is generating a ConcurrentModificationException.
+		// Probably we are trying to remove a player missile while we're iterating over it.
+		// Are these things happening on separate threads?
+		//
+		// Exception in thread "AWT-EventQueue-0" java.util.ConcurrentModificationException
+		// at java.util.LinkedList$ListItr.checkForComodification(LinkedList.java:966)
+		// at java.util.LinkedList$ListItr.next(LinkedList.java:888)
+		// at com.williewheeler.airrage.ui.GamePane.paintPlayerMissiles(GamePane.java:118)
+		// at com.williewheeler.airrage.ui.GamePane.paint(GamePane.java:50)
+		// at javax.swing.JComponent.paintChildren(JComponent.java:889)
+		// at javax.swing.JComponent.paint(JComponent.java:1065)
+		// at javax.swing.JComponent.paintChildren(JComponent.java:889)
+		// at javax.swing.JComponent.paint(JComponent.java:1065)
 		for (PlayerMissile missile : missiles) {
 			paint(g, missile, playerMissileRenderer);
 		}
