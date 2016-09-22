@@ -1,9 +1,11 @@
 package com.williewheeler.airrage.model.gameobj;
 
 import com.williewheeler.airrage.Config;
+import com.williewheeler.airrage.GameUtil;
 import com.williewheeler.airrage.model.GameState;
 
 import java.awt.*;
+import java.util.Random;
 
 /**
  * Created by willie on 9/18/16.
@@ -13,10 +15,9 @@ public class EnemyPlane implements GameObject {
 
 	public static final int STATE_DAMAGED = 1 << 0;
 	public static final int STATE_SPINNING = 1 << 1;
-	public static final int STATE_DESTROYED = 1 << 2;
 
 	private static final int SPEED = 2;
-	private static final int FIRE_PERIOD = Config.TARGET_FPS;
+	private static final int FIRE_PERIOD = Config.TARGET_FPS / 3;
 
 	private GameState gameState;
 	private int x;
@@ -29,6 +30,8 @@ public class EnemyPlane implements GameObject {
 	 * In radians. 0 degrees is north.
 	 */
 	private double rotation;
+
+	private boolean firingMood = true;
 
 	public EnemyPlane(GameState gameState, int x, int y) {
 		this(gameState, x, y, Math.PI);
@@ -93,7 +96,20 @@ public class EnemyPlane implements GameObject {
 	private void updateStateForUndamagedPlane(int frameIndex) {
 		// For now, enemies just fire like crazy.
 		if (frameIndex % FIRE_PERIOD == 0) {
-			fireGuns();
+			Random random = GameUtil.random();
+			if (firingMood) {
+				if (random.nextDouble() < 0.1) {
+					firingMood = false;
+				}
+			} else {
+				if (random.nextDouble() < 0.2) {
+					firingMood = true;
+				}
+			}
+
+			if (firingMood) {
+				fireGuns();
+			}
 		}
 	}
 

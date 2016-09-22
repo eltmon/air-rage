@@ -59,12 +59,12 @@ public class ImageRenderer implements Renderer {
 				g2.setColor(Color.ORANGE);
 				g2.fillOval(x + 2, y + 2, size - 4, size - 4);
 			}
-			int numPuffs = random.nextInt(10);
+			int numPuffs = random.nextInt(6);
 			for (int i = 0; i < numPuffs; i++) {
 				int x = random.nextInt(enemyPlane.getWidth());
 				int y = random.nextInt(enemyPlane.getHeight());
 				int size = random.nextInt(10) + 10;
-				g2.setColor(Color.GRAY);
+				g2.setColor(Color.DARK_GRAY);
 				g2.fillOval(x, y, size, size);
 			}
 		}
