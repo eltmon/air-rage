@@ -78,7 +78,7 @@ public class AirRage extends JFrame {
 			String type = event.getType();
 			if (GameEvent.PLAYER_FIRED.equals(type)) {
 				audioManager.playSoundEffect("gunfire", false);
-			} else if (GameEvent.ENEMY_DOWNED.equals(type)) {
+			} else if (GameEvent.ENEMY_HIT.equals(type)) {
 				audioManager.playSoundEffect("explosion", false);
 			}
 		}

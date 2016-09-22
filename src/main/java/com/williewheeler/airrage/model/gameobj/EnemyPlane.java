@@ -11,12 +11,19 @@ import java.awt.*;
 public class EnemyPlane implements GameObject {
 	public static final Dimension ENEMY_SIZE_PX = new Dimension(64, 64);
 
+	public static final int STATE_DAMAGED = 1 << 0;
+	public static final int STATE_SPINNING = 1 << 1;
+	public static final int STATE_DESTROYED = 1 << 2;
+
 	private static final int SPEED = 2;
 	private static final int FIRE_PERIOD = Config.TARGET_FPS;
 
 	private GameState gameState;
 	private int x;
 	private int y;
+
+	/** State flags */
+	private int stateFlags = 0;
 
 	/**
 	 * In radians. 0 degrees is north.
@@ -64,13 +71,35 @@ public class EnemyPlane implements GameObject {
 		return -1;
 	}
 
+	public int getStateFlags() {
+		return stateFlags;
+	}
+
+	public void setStateFlags(int stateFlags) {
+		this.stateFlags = stateFlags;
+	}
+
 	@Override
 	public void updateState(int frameIndex) {
 		this.y -= SPEED;
 
+		if ((stateFlags & STATE_DAMAGED) == 0) {
+			updateStateForUndamagedPlane(frameIndex);
+		} else {
+			updateStateForDamagedPlane(frameIndex);
+		}
+	}
+
+	private void updateStateForUndamagedPlane(int frameIndex) {
 		// For now, enemies just fire like crazy.
 		if (frameIndex % FIRE_PERIOD == 0) {
 			fireGuns();
+		}
+	}
+
+	private void updateStateForDamagedPlane(int frameIndex) {
+		if ((stateFlags & STATE_SPINNING) > 0) {
+			this.rotation += 0.2;
 		}
 	}
 
