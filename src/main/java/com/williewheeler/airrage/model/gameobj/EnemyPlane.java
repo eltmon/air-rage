@@ -119,9 +119,10 @@ public class EnemyPlane implements GameObject {
 		}
 
 		if (frameIndex % 5 == 0) {
+			Random random = GameUtil.random();
 			double adjRot = rotation - Math.PI / 2;
-			int rotX = (int) (x + 10 * Math.cos(adjRot));
-			int rotY = (int) (y + 10 * Math.sin(adjRot));
+			int rotX = (int) (x + 10 * Math.cos(adjRot)) + random.nextInt(4) - 2;
+			int rotY = (int) (y + 10 * Math.sin(adjRot)) + random.nextInt(4) - 2;
 			PuffOfSmoke puff = new PuffOfSmoke(rotX, rotY, 5);
 			gameState.addPuffOfSmoke(puff);
 		}
