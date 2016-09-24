@@ -30,6 +30,7 @@ public class GameState {
 	private final List<EnemyPlane> enemyPlanes = new LinkedList<>();
 	private final List<EnemyMissile> enemyMissiles = new LinkedList<>();
 	private final List<PuffOfSmoke> puffsOfSmoke = new LinkedList<>();
+	private final List<Explosion> explosions = new LinkedList<>();
 
 	private int frameIndex;
 
@@ -80,9 +81,15 @@ public class GameState {
 	}
 
 	public void addPuffOfSmoke(PuffOfSmoke puff) {
-//		log.debug("Adding puff: x={}, y={}, radius={}", puff.getX(), puff.getY(), puff.getRadius());
 		puffsOfSmoke.add(puff);
-//		log.debug("There are now {} puffs of smoke", puffsOfSmoke.size());
+	}
+
+	public List<Explosion> getExplosions() {
+		return explosions;
+	}
+
+	public void addExplosion(Explosion explosion) {
+		explosions.add(explosion);
 	}
 
 	public void fireGameEvent(GameEvent event) {
@@ -95,18 +102,19 @@ public class GameState {
 	 * Advance the game state forward one frame.
 	 */
 	public void updateState() {
-		checkForDownedPlayer();
-		checkForDownedEnemies();
+		checkPlayerHit();
+		checkEnemiesHit();
 		player.updateState(frameIndex);
-		updatePlayerMissiles();
-		updateEnemies();
-		updateEnemyMissiles();
-		updatePuffsOfSmoke();
+		updateAll(playerMissiles);
+		updateAll(enemyPlanes);
+		updateAll(enemyMissiles);
+		updateAll(puffsOfSmoke);
+		updateAll(explosions);
 		fireTriggers();
 		this.frameIndex = (frameIndex + 1) % Config.TARGET_FPS;
 	}
 
-	private void checkForDownedPlayer() {
+	private void checkPlayerHit() {
 		ListIterator<EnemyMissile> missileIt = enemyMissiles.listIterator();
 		while (missileIt.hasNext()) {
 			EnemyMissile missile = missileIt.next();
@@ -117,7 +125,7 @@ public class GameState {
 		}
 	}
 
-	private void checkForDownedEnemies() {
+	private void checkEnemiesHit() {
 		ListIterator<PlayerMissile> missileIt = playerMissiles.listIterator();
 		while (missileIt.hasNext()) {
 			PlayerMissile missile = missileIt.next();
@@ -129,8 +137,22 @@ public class GameState {
 					missileIt.remove();
 					int stateFlags = plane.getStateFlags();
 					stateFlags |= EnemyPlane.STATE_DAMAGED;
-					if (GameUtil.random().nextDouble() < 0.05) {
+					double d = GameUtil.RANDOM.nextDouble();
+					if (d < 0.05) {
 						stateFlags |= EnemyPlane.STATE_SPINNING;
+					} else if (d < 0.25) {
+						stateFlags |= EnemyPlane.STATE_DESTROYED;
+						plane.setTtl(0);
+
+						// TODO Move this code
+						int numFireballs = GameUtil.RANDOM.nextInt(5) + 5;
+						for (int i = 0; i < numFireballs; i++) {
+							int x = plane.getX() + GameUtil.RANDOM.nextInt(20) - 10;
+							int y = plane.getY() + GameUtil.RANDOM.nextInt(20) - 10;
+							int radius = GameUtil.RANDOM.nextInt(10) + 10;
+							int alpha = GameUtil.RANDOM.nextInt(50) + 150;
+							explosions.add(new Explosion(x, y, radius, alpha));
+						}
 					}
 					plane.setStateFlags(stateFlags);
 					fireGameEvent(new GameEvent(GameEvent.ENEMY_HIT));
@@ -139,44 +161,16 @@ public class GameState {
 		}
 	}
 
-	private void updatePlayerMissiles() {
-		ListIterator<PlayerMissile> it = playerMissiles.listIterator();
+	private <T extends GameObject> void updateAll(List<T> gameObjects) {
+		ListIterator<T> it = gameObjects.listIterator();
 		while (it.hasNext()) {
-			PlayerMissile missile = it.next();
-			missile.updateState(frameIndex);
-			if (missile.getTtl() <= 0) {
+			T gameObject = it.next();
+			gameObject.updateState(frameIndex);
+
+			// Use == 0, not <= 0, as -1 means infinite TTL
+			if (gameObject.getTtl() == 0) {
 				it.remove();
 			}
-		}
-	}
-
-	private void updateEnemies() {
-		ListIterator<EnemyPlane> it = enemyPlanes.listIterator();
-		while (it.hasNext()) {
-			EnemyPlane plane = it.next();
-			plane.updateState(frameIndex);
-		}
-	}
-
-	private void updateEnemyMissiles() {
-		ListIterator<EnemyMissile> it = enemyMissiles.listIterator();
-		while (it.hasNext()) {
-			EnemyMissile missile = it.next();
-			missile.updateState(frameIndex);
-			if (missile.getTtl() <= 0) {
-				it.remove();
-			}
-		}
-	}
-
-	private void updatePuffsOfSmoke() {
-		ListIterator<PuffOfSmoke> it = puffsOfSmoke.listIterator();
-		while (it.hasNext()) {
-			PuffOfSmoke puff = it.next();
-			puff.updateState(frameIndex);
-//			if (puff.getTtl() <= 0) {
-//				it.remove();
-//			}
 		}
 	}
 

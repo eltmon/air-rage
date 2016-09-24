@@ -6,11 +6,7 @@ import java.util.Random;
  * Created by willie on 9/11/16.
  */
 public class GameUtil {
-	private static final Random RANDOM = new Random();
-
-	public static Random random() {
-		return RANDOM;
-	}
+	public static final Random RANDOM = new Random();
 
 	public static void sleep(long duration) {
 		try {

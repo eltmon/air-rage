@@ -17,9 +17,6 @@ public class PuffOfSmokeRenderer implements Renderer {
 	public void paint(Graphics2D g2, GameObject gameObject) {
 		PuffOfSmoke puff = (PuffOfSmoke) gameObject;
 
-//		log.debug("Painting puff: x={}, y={}, radius={}, brightness={}, alpha={}",
-//				puff.getX(), puff.getY(), puff.getRadius(), puff.getBrightness(), puff.getAlpha());
-
 		int brightness = puff.getBrightness();
 		int alpha = puff.getAlpha();
 		Color color = new Color(brightness, brightness, brightness, alpha);

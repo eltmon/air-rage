@@ -45,7 +45,7 @@ public class ImageRenderer implements Renderer {
 
 		g2.drawImage(image, xform, null);
 
-		Random random = GameUtil.random();
+		Random random = GameUtil.RANDOM;
 		int stateFlags = enemyPlane.getStateFlags();
 
 		if ((stateFlags & EnemyPlane.STATE_DAMAGED) > 0) {

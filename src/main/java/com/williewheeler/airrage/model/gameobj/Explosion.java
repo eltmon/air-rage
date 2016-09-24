@@ -1,25 +1,21 @@
 package com.williewheeler.airrage.model.gameobj;
 
-import com.williewheeler.airrage.GameUtil;
-
 /**
- * Created by willie on 9/23/16.
+ * Created by willie on 9/24/16.
  */
-public class PuffOfSmoke implements GameObject {
+public class Explosion implements GameObject {
 	private int x;
 	private int y;
 	private int radius;
-	private int brightness;
 
 	/** 0-255. 0 is fully transparent */
 	private int alpha;
 
-	public PuffOfSmoke(int x, int y, int radius) {
+	public Explosion(int x, int y, int radius, int alpha) {
 		this.x = x;
 		this.y = y;
 		this.radius = radius;
-		this.brightness = GameUtil.RANDOM.nextInt(66) + 40;
-		this.alpha = 100;
+		this.alpha = alpha;
 	}
 
 	@Override
@@ -49,16 +45,12 @@ public class PuffOfSmoke implements GameObject {
 
 	@Override
 	public int getTtl() {
-		// When alpha drops to 0, poof! :)
-		return alpha;
+//		return radius;
+		return -1;
 	}
 
 	public int getRadius() {
 		return radius;
-	}
-
-	public int getBrightness() {
-		return brightness;
 	}
 
 	public int getAlpha() {
@@ -68,9 +60,18 @@ public class PuffOfSmoke implements GameObject {
 	@Override
 	public void updateState(int frameIndex) {
 		if (frameIndex % 3 == 0) {
-			this.radius += 1;
+			this.radius = Math.max(0, radius - 1);
 			this.alpha = Math.max(0, alpha - 5);
 		}
 	}
-}
 
+	@Override
+	public String toString() {
+		return "Explosion{" +
+				"x=" + x +
+				", y=" + y +
+				", radius=" + radius +
+				", alpha=" + alpha +
+				'}';
+	}
+}

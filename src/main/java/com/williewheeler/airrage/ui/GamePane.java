@@ -35,6 +35,7 @@ public class GamePane extends JComponent {
 	private Renderer enemyPlaneRenderer = new ImageRenderer(Sprites.F6F_HELLCAT);
 	private Renderer enemyMissileRenderer = new MissileRenderer(Color.BLUE, Color.WHITE);
 	private Renderer puffOfSmokeRenderer = new PuffOfSmokeRenderer();
+	private Renderer explosionRenderer = new ExplosionRenderer();
 
 	public GamePane(GameState gameState) {
 		this.gameState = gameState;
@@ -43,11 +44,13 @@ public class GamePane extends JComponent {
 	@Override
 	public void paint(Graphics g) {
 		paintTiles(g);
-		paintEnemyPlanes(g);
+		paintAll(g, gameState.getEnemyPlanes(), enemyPlaneRenderer);
 		paintPlayer(g);
-		paintEnemyMissiles(g);
-		paintPlayerMissiles(g);
-		paintPuffsOfSmoke(g);
+		paintAll(g, gameState.getEnemyMissiles(), enemyMissileRenderer);
+		paintAll(g, gameState.getPlayerMissiles(), playerMissileRenderer);
+		paintAll(g, gameState.getPuffsOfSmoke(), puffOfSmokeRenderer);
+//		log.debug("There are {} explosions", gameState.getExplosions().size());
+		paintAll(g, gameState.getExplosions(), explosionRenderer);
 	}
 
 	private void paintTiles(Graphics g) {
@@ -95,49 +98,26 @@ public class GamePane extends JComponent {
 		}
 	}
 
-	private void paintEnemyPlanes(Graphics g) {
-		List<EnemyPlane> planes = gameState.getEnemyPlanes();
-		for (EnemyPlane plane : planes) {
-			paint(g, plane, enemyPlaneRenderer);
-		}
-	}
-
 	private void paintPlayer(Graphics g) {
 		paint(g, gameState.getPlayer(), playerRenderer);
 	}
 
-	private void paintEnemyMissiles(Graphics g) {
-		List<EnemyMissile> missiles = gameState.getEnemyMissiles();
-		for (EnemyMissile missile : missiles) {
-			paint(g, missile, enemyMissileRenderer);
-		}
-	}
-
-	private void paintPlayerMissiles(Graphics g) {
-		List<PlayerMissile> missiles = gameState.getPlayerMissiles();
-		// FIXME This is generating a ConcurrentModificationException.
-		// Probably we are trying to remove a player missile while we're iterating over it.
-		// Are these things happening on separate threads?
-		//
-		// Exception in thread "AWT-EventQueue-0" java.util.ConcurrentModificationException
-		// at java.util.LinkedList$ListItr.checkForComodification(LinkedList.java:966)
-		// at java.util.LinkedList$ListItr.next(LinkedList.java:888)
-		// at com.williewheeler.airrage.ui.GamePane.paintPlayerMissiles(GamePane.java:118)
-		// at com.williewheeler.airrage.ui.GamePane.paint(GamePane.java:50)
-		// at javax.swing.JComponent.paintChildren(JComponent.java:889)
-		// at javax.swing.JComponent.paint(JComponent.java:1065)
-		// at javax.swing.JComponent.paintChildren(JComponent.java:889)
-		// at javax.swing.JComponent.paint(JComponent.java:1065)
-		for (PlayerMissile missile : missiles) {
-			paint(g, missile, playerMissileRenderer);
-		}
-	}
-
-	private void paintPuffsOfSmoke(Graphics g) {
-		List<PuffOfSmoke> puffs = gameState.getPuffsOfSmoke();
-//		log.debug("Found {} puffs", puffs.size());
-		for (PuffOfSmoke puff : puffs) {
-			paint(g, puff, puffOfSmokeRenderer);
+	// FIXME This is generating a ConcurrentModificationException.
+	// Probably we are trying to remove a player missile while we're iterating over it.
+	// Are these things happening on separate threads?
+	//
+	// Exception in thread "AWT-EventQueue-0" java.util.ConcurrentModificationException
+	// at java.util.LinkedList$ListItr.checkForComodification(LinkedList.java:966)
+	// at java.util.LinkedList$ListItr.next(LinkedList.java:888)
+	// at com.williewheeler.airrage.ui.GamePane.paintPlayerMissiles(GamePane.java:118)
+	// at com.williewheeler.airrage.ui.GamePane.paint(GamePane.java:50)
+	// at javax.swing.JComponent.paintChildren(JComponent.java:889)
+	// at javax.swing.JComponent.paint(JComponent.java:1065)
+	// at javax.swing.JComponent.paintChildren(JComponent.java:889)
+	// at javax.swing.JComponent.paint(JComponent.java:1065)
+	private <T extends GameObject> void paintAll(Graphics g, List<T> gameObjects, Renderer renderer) {
+		for (T gameObject : gameObjects) {
+			paint(g, gameObject, renderer);
 		}
 	}
 

@@ -15,6 +15,7 @@ public class EnemyPlane implements GameObject {
 
 	public static final int STATE_DAMAGED = 1 << 0;
 	public static final int STATE_SPINNING = 1 << 1;
+	public static final int STATE_DESTROYED = 1 << 2;
 
 	private static final int SPEED = 2;
 	private static final int FIRE_PERIOD = Config.TARGET_FPS / 3;
@@ -31,6 +32,8 @@ public class EnemyPlane implements GameObject {
 	 */
 	private double rotation;
 
+	private int ttl;
+
 	private boolean firingMood = true;
 
 	public EnemyPlane(GameState gameState, int x, int y) {
@@ -42,6 +45,7 @@ public class EnemyPlane implements GameObject {
 		this.x = x;
 		this.y = y;
 		this.rotation = rotation;
+		this.ttl = -1;
 	}
 
 	@Override
@@ -71,7 +75,11 @@ public class EnemyPlane implements GameObject {
 
 	@Override
 	public int getTtl() {
-		return -1;
+		return ttl;
+	}
+
+	public void setTtl(int ttl) {
+		this.ttl = ttl;
 	}
 
 	public int getStateFlags() {
@@ -94,9 +102,8 @@ public class EnemyPlane implements GameObject {
 	}
 
 	private void updateStateForUndamagedPlane(int frameIndex) {
-		// For now, enemies just fire like crazy.
 		if (frameIndex % FIRE_PERIOD == 0) {
-			Random random = GameUtil.random();
+			Random random = GameUtil.RANDOM;
 			if (firingMood) {
 				if (random.nextDouble() < 0.1) {
 					firingMood = false;
@@ -119,7 +126,7 @@ public class EnemyPlane implements GameObject {
 		}
 
 		if (frameIndex % 5 == 0) {
-			Random random = GameUtil.random();
+			Random random = GameUtil.RANDOM;
 			double adjRot = rotation - Math.PI / 2;
 			int rotX = (int) (x + 10 * Math.cos(adjRot)) + random.nextInt(4) - 2;
 			int rotY = (int) (y + 10 * Math.sin(adjRot)) + random.nextInt(4) - 2;
