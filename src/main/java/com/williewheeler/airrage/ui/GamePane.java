@@ -5,10 +5,8 @@ import com.williewheeler.airrage.model.GameState;
 import com.williewheeler.airrage.model.gameobj.*;
 import com.williewheeler.airrage.model.level.Level;
 import com.williewheeler.airrage.model.level.Tiles;
-import com.williewheeler.airrage.ui.renderer.ImageRenderer;
-import com.williewheeler.airrage.ui.renderer.MissileRenderer;
+import com.williewheeler.airrage.ui.renderer.*;
 import com.williewheeler.airrage.ui.renderer.Renderer;
-import com.williewheeler.airrage.ui.renderer.TileRenderer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +34,7 @@ public class GamePane extends JComponent {
 	private Renderer playerMissileRenderer = new MissileRenderer(Color.RED, Color.ORANGE);
 	private Renderer enemyPlaneRenderer = new ImageRenderer(Sprites.F6F_HELLCAT);
 	private Renderer enemyMissileRenderer = new MissileRenderer(Color.BLUE, Color.WHITE);
+	private Renderer puffOfSmokeRenderer = new PuffOfSmokeRenderer();
 
 	public GamePane(GameState gameState) {
 		this.gameState = gameState;
@@ -48,6 +47,7 @@ public class GamePane extends JComponent {
 		paintPlayer(g);
 		paintEnemyMissiles(g);
 		paintPlayerMissiles(g);
+		paintPuffsOfSmoke(g);
 	}
 
 	private void paintTiles(Graphics g) {
@@ -130,6 +130,14 @@ public class GamePane extends JComponent {
 		// at javax.swing.JComponent.paint(JComponent.java:1065)
 		for (PlayerMissile missile : missiles) {
 			paint(g, missile, playerMissileRenderer);
+		}
+	}
+
+	private void paintPuffsOfSmoke(Graphics g) {
+		List<PuffOfSmoke> puffs = gameState.getPuffsOfSmoke();
+//		log.debug("Found {} puffs", puffs.size());
+		for (PuffOfSmoke puff : puffs) {
+			paint(g, puff, puffOfSmokeRenderer);
 		}
 	}
 

@@ -117,6 +117,14 @@ public class EnemyPlane implements GameObject {
 		if ((stateFlags & STATE_SPINNING) > 0) {
 			this.rotation += 0.2;
 		}
+
+		if (frameIndex % 5 == 0) {
+			double adjRot = rotation - Math.PI / 2;
+			int rotX = (int) (x + 10 * Math.cos(adjRot));
+			int rotY = (int) (y + 10 * Math.sin(adjRot));
+			PuffOfSmoke puff = new PuffOfSmoke(rotX, rotY, 5);
+			gameState.addPuffOfSmoke(puff);
+		}
 	}
 
 	private void fireGuns() {

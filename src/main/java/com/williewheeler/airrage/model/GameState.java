@@ -4,10 +4,7 @@ import com.williewheeler.airrage.Config;
 import com.williewheeler.airrage.GameUtil;
 import com.williewheeler.airrage.event.GameEvent;
 import com.williewheeler.airrage.event.GameListener;
-import com.williewheeler.airrage.model.gameobj.EnemyMissile;
-import com.williewheeler.airrage.model.gameobj.EnemyPlane;
-import com.williewheeler.airrage.model.gameobj.Player;
-import com.williewheeler.airrage.model.gameobj.PlayerMissile;
+import com.williewheeler.airrage.model.gameobj.*;
 import com.williewheeler.airrage.model.level.Level;
 import com.williewheeler.airrage.model.trigger.Trigger;
 import org.slf4j.Logger;
@@ -32,6 +29,7 @@ public class GameState {
 	private final List<PlayerMissile> playerMissiles = new LinkedList<>();
 	private final List<EnemyPlane> enemyPlanes = new LinkedList<>();
 	private final List<EnemyMissile> enemyMissiles = new LinkedList<>();
+	private final List<PuffOfSmoke> puffsOfSmoke = new LinkedList<>();
 
 	private int frameIndex;
 
@@ -77,6 +75,16 @@ public class GameState {
 		enemyMissiles.add(missile);
 	}
 
+	public List<PuffOfSmoke> getPuffsOfSmoke() {
+		return puffsOfSmoke;
+	}
+
+	public void addPuffOfSmoke(PuffOfSmoke puff) {
+//		log.debug("Adding puff: x={}, y={}, radius={}", puff.getX(), puff.getY(), puff.getRadius());
+		puffsOfSmoke.add(puff);
+//		log.debug("There are now {} puffs of smoke", puffsOfSmoke.size());
+	}
+
 	public void fireGameEvent(GameEvent event) {
 		for (GameListener listener : gameListeners) {
 			listener.handleGameEvent(event);
@@ -93,6 +101,7 @@ public class GameState {
 		updatePlayerMissiles();
 		updateEnemies();
 		updateEnemyMissiles();
+		updatePuffsOfSmoke();
 		fireTriggers();
 		this.frameIndex = (frameIndex + 1) % Config.TARGET_FPS;
 	}
@@ -157,6 +166,17 @@ public class GameState {
 			if (missile.getTtl() <= 0) {
 				it.remove();
 			}
+		}
+	}
+
+	private void updatePuffsOfSmoke() {
+		ListIterator<PuffOfSmoke> it = puffsOfSmoke.listIterator();
+		while (it.hasNext()) {
+			PuffOfSmoke puff = it.next();
+			puff.updateState(frameIndex);
+//			if (puff.getTtl() <= 0) {
+//				it.remove();
+//			}
 		}
 	}
 
