@@ -24,9 +24,13 @@ public class CollisionDetector {
 		ListIterator<EnemyMissile> missileIt = enemyMissiles.listIterator();
 		while (missileIt.hasNext()) {
 			EnemyMissile missile = missileIt.next();
-			boolean collision = collision(missile, player);
+			boolean collision = checkCollision(missile, player);
 			if (collision) {
-				player.setDowned(true);
+				missileIt.remove();
+				player.decrementHealth(1);
+				int numFireballs = GameUtil.RANDOM.nextInt(2) + 1;
+				addFireballs(player, numFireballs);
+				gameState.fireGameEvent(new GameEvent(GameEvent.PLANE_HIT));
 			}
 		}
 	}
@@ -41,7 +45,7 @@ public class CollisionDetector {
 			ListIterator<EnemyPlane> planeIt = enemyPlanes.listIterator();
 			while (planeIt.hasNext()) {
 				EnemyPlane plane = planeIt.next();
-				boolean collision = CollisionDetector.collision(missile, plane);
+				boolean collision = checkCollision(missile, plane);
 				if (collision) {
 					missileIt.remove();
 					int stateFlags = plane.getPlaneState();
@@ -52,30 +56,32 @@ public class CollisionDetector {
 					} else if (d < 0.25) {
 						stateFlags |= GameObjectStates.STATE_DESTROYED;
 						plane.setTtl(0);
-
-						// TODO Move this code
 						int numFireballs = GameUtil.RANDOM.nextInt(5) + 5;
-						for (int i = 0; i < numFireballs; i++) {
-							int x = plane.getX() + GameUtil.RANDOM.nextInt(20) - 10;
-							int y = plane.getY() + GameUtil.RANDOM.nextInt(20) - 10;
-							int radius = GameUtil.RANDOM.nextInt(10) + 10;
-							int alpha = GameUtil.RANDOM.nextInt(50) + 150;
-							gameState.addExplosion(new Explosion(x, y, radius, alpha));
-						}
+						addFireballs(plane, numFireballs);
 					}
 					plane.setPlaneState(stateFlags);
-					gameState.fireGameEvent(new GameEvent(GameEvent.ENEMY_HIT));
+					gameState.fireGameEvent(new GameEvent(GameEvent.PLANE_HIT));
 				}
 			}
 		}
 	}
 
-	private static boolean collision(GameObject o1, GameObject o2) {
+	private boolean checkCollision(GameObject o1, GameObject o2) {
 		// TODO For right now just decide whether the objects are "close". But really we want to check whether their
 		// bounding boxes (or spheres, however we do it) intersect.
 		int xDiff = o1.getX() - o2.getX();
 		int yDiff = o1.getY() - o2.getY();
 		double dist = Math.sqrt(xDiff * xDiff + yDiff * yDiff);
 		return dist < 32;
+	}
+
+	private void addFireballs(GameObject gameObject, int numFireballs) {
+		for (int i = 0; i < numFireballs; i++) {
+			int x = gameObject.getX() + GameUtil.RANDOM.nextInt(20) - 10;
+			int y = gameObject.getY() + GameUtil.RANDOM.nextInt(20) - 10;
+			int radius = GameUtil.RANDOM.nextInt(10) + 10;
+			int alpha = GameUtil.RANDOM.nextInt(50) + 150;
+			gameState.addExplosion(new Explosion(x, y, radius, alpha));
+		}
 	}
 }

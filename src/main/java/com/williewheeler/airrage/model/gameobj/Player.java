@@ -34,18 +34,15 @@ public class Player implements GameObject {
 	/** This is the micro y */
 	private int yOffset;
 
-	/** State flags */
-	private int planeState = 0;
-
 	private double rotation = 0.0;
+
+	private int health = 10;
 
 	private boolean moveUpIntent;
 	private boolean moveDownIntent;
 	private boolean moveLeftIntent;
 	private boolean moveRightIntent;
 	private boolean fireIntent;
-
-	private boolean downed = false;
 
 	public Player(GameState gameState) {
 		this.gameState = gameState;
@@ -74,10 +71,6 @@ public class Player implements GameObject {
 		return progressY;
 	}
 
-	public int getYOffset() {
-		return yOffset;
-	}
-
 	@Override
 	public double getRotation() {
 		return rotation;
@@ -86,6 +79,14 @@ public class Player implements GameObject {
 	@Override
 	public int getTtl() {
 		return -1;
+	}
+
+	public int getHealth() {
+		return health;
+	}
+
+	public void decrementHealth(int amount) {
+		this.health = Math.max(0, health - amount);
 	}
 
 	public void setMoveUpIntent(boolean moveUpIntent) {
@@ -108,10 +109,6 @@ public class Player implements GameObject {
 		this.fireIntent = fireIntent;
 	}
 
-	public void setDowned(boolean downed) {
-		this.downed = downed;
-	}
-
 	@Override
 	public void updateState(int frameIndex) {
 
@@ -119,14 +116,14 @@ public class Player implements GameObject {
 		// external to the player.
 		this.progressY += Player.PROGRESS_SPEED;
 
-		if (downed) {
-			updateStateForDamagedPlayer(frameIndex);
+		if (health > 0) {
+			updateStateForLivingPlayer(frameIndex);
 		} else {
-			updateStateForUndamagedPlayer(frameIndex);
+			updateStateForDeadPlayer(frameIndex);
 		}
 	}
 
-	private void updateStateForUndamagedPlayer(int frameIndex) {
+	private void updateStateForLivingPlayer(int frameIndex) {
 		if (frameIndex % PUFF_PERIOD == 0) {
 			createPuffOfSmoke(1, 255);
 		}
@@ -150,7 +147,7 @@ public class Player implements GameObject {
 		}
 	}
 
-	private void updateStateForDamagedPlayer(int frameIndex) {
+	private void updateStateForDeadPlayer(int frameIndex) {
 		rotation += 0.1;
 
 		if (frameIndex % PUFF_PERIOD == 0) {

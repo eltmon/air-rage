@@ -2,6 +2,7 @@ package com.williewheeler.airrage.ui;
 
 import com.williewheeler.airrage.Config;
 import com.williewheeler.airrage.model.GameState;
+import com.williewheeler.airrage.model.gameobj.Player;
 
 import java.awt.*;
 
@@ -11,7 +12,9 @@ import java.awt.*;
 public class HeadsUpDisplay {
 	private static final Dimension MY_SIZE = new Dimension(Config.VIEWPORT_SIZE_PX.width, 32);
 
+	// This should be set to the max player health.
 	private static final int HEALTH_METER_NUM_CELLS = 10;
+
 	private static final int HEALTH_METER_CELL_WIDTH = 6;
 	private static final int HEALTH_METER_CELL_HEIGHT = 12;
 	private static final int HEALTH_METER_BORDER = 2;
@@ -54,8 +57,8 @@ public class HeadsUpDisplay {
 		g.setColor(Color.BLACK);
 		g.fillRect(HEALTH_METER_BORDER, HEALTH_METER_BORDER, HEALTH_METER_WIDTH - borderPlusGap, HEALTH_METER_HEIGHT - borderPlusGap);
 
-		// TODO
-		for (int i = 0; i < HEALTH_METER_NUM_CELLS; i++) {
+		Player player = gameState.getPlayer();
+		for (int i = 0; i < player.getHealth(); i++) {
 			Color cellColor;
 			double percentage = (i + 1) / (double) HEALTH_METER_NUM_CELLS;
 			if (percentage <= 0.31) {

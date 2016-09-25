@@ -45,11 +45,6 @@ public class Explosion implements GameObject {
 
 	@Override
 	public int getTtl() {
-//		return radius;
-		return -1;
-	}
-
-	public int getRadius() {
 		return radius;
 	}
 
