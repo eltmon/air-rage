@@ -85,12 +85,13 @@ public class GamePane extends JComponent {
 				int tileScreenX = j * TILE_SIZE_PX.width;
 				g.translate(tileScreenX, tileScreenY);
 				int tile = gameMap[i][j];
+				int frameIndex = gameState.getFrameIndex();
 				switch (tile) {
 					case Tiles.LAND:
-						grassTileRenderer.paint(g2, null);
+						grassTileRenderer.paint(g2, null, frameIndex);
 						break;
 					case Tiles.SEA:
-						seaTileRenderer.paint(g2, null);
+						seaTileRenderer.paint(g2, null, frameIndex);
 						break;
 				}
 				g.translate(-tileScreenX, -tileScreenY);
@@ -130,7 +131,7 @@ public class GamePane extends JComponent {
 		int shiftY = mySize.height - yOffset - gameObject.getHeight() / 2;
 
 		g.translate(shiftX, shiftY);
-		renderer.paint((Graphics2D) g, gameObject);
+		renderer.paint((Graphics2D) g, gameObject, gameState.getFrameIndex());
 		g.translate(-shiftX, -shiftY);
 	}
 }

@@ -25,14 +25,13 @@ public class GameState {
 
 	private Player player;
 	private Level level;
+	private int frameIndex;
 
 	private final List<PlayerMissile> playerMissiles = new LinkedList<>();
 	private final List<EnemyPlane> enemyPlanes = new LinkedList<>();
 	private final List<EnemyMissile> enemyMissiles = new LinkedList<>();
 	private final List<PuffOfSmoke> puffsOfSmoke = new LinkedList<>();
 	private final List<Explosion> explosions = new LinkedList<>();
-
-	private int frameIndex;
 
 	public GameState(Level level) {
 		this.collisionDetector = new CollisionDetector(this);
@@ -52,6 +51,10 @@ public class GameState {
 
 	public Level getLevel() {
 		return level;
+	}
+
+	public int getFrameIndex() {
+		return frameIndex;
 	}
 
 	public List<EnemyPlane> getEnemyPlanes() {

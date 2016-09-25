@@ -200,8 +200,8 @@ public class Player implements GameObject {
 
 	private void fireGuns() {
 		int missileY = getY() + 12;
-		gameState.addPlayerMissile(new PlayerMissile(x - 21, missileY));
-		gameState.addPlayerMissile(new PlayerMissile(x + 19, missileY));
+		gameState.addPlayerMissile(new PlayerMissile(x - 16, missileY));
+		gameState.addPlayerMissile(new PlayerMissile(x + 14, missileY));
 
 		GameEvent event = new GameEvent(GameEvent.PLAYER_FIRED);
 		gameState.fireGameEvent(event);

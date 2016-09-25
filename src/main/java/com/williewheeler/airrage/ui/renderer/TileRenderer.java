@@ -19,7 +19,7 @@ public class TileRenderer implements Renderer {
 	}
 
 	@Override
-	public void paint(Graphics2D g2, GameObject gameObject) {
+	public void paint(Graphics2D g2, GameObject gameObject, int frameIndex) {
 		g2.setColor(color);
 		g2.fillRect(0, 0, Config.TILE_SIZE_PX.width, Config.TILE_SIZE_PX.height);
 	}

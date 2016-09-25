@@ -14,7 +14,7 @@ public class ExplosionRenderer implements Renderer {
 	private static final Logger log = LoggerFactory.getLogger(ExplosionRenderer.class);
 
 	@Override
-	public void paint(Graphics2D g2, GameObject gameObject) {
+	public void paint(Graphics2D g2, GameObject gameObject, int frameIndex) {
 		Explosion explosion = (Explosion) gameObject;
 //		log.debug("Painting explosion: {}", explosion);
 		int alpha = explosion.getAlpha();

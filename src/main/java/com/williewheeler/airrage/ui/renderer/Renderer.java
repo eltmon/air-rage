@@ -14,6 +14,7 @@ public interface Renderer {
 	 *
 	 * @param g2
 	 * @param gameObject
+	 * @param frameIndex
 	 */
-	void paint(Graphics2D g2, GameObject gameObject);
+	void paint(Graphics2D g2, GameObject gameObject, int frameIndex);
 }

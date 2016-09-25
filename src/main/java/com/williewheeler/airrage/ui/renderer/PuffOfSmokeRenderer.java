@@ -14,7 +14,7 @@ public class PuffOfSmokeRenderer implements Renderer {
 	private static final Logger log = LoggerFactory.getLogger(PuffOfSmokeRenderer.class);
 
 	@Override
-	public void paint(Graphics2D g2, GameObject gameObject) {
+	public void paint(Graphics2D g2, GameObject gameObject, int frameIndex) {
 		PuffOfSmoke puff = (PuffOfSmoke) gameObject;
 
 		int brightness = puff.getBrightness();

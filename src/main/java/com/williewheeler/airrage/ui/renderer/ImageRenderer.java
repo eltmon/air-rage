@@ -7,24 +7,28 @@ import com.williewheeler.airrage.model.gameobj.GameObjectStates;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.util.Random;
 
 /**
  * Created by willie on 9/20/16.
  */
 public class ImageRenderer implements Renderer {
-	private Image image;
+	private BufferedImage[] sprites;
 
-	public ImageRenderer(Image image) {
-		this.image = image;
+	public ImageRenderer(BufferedImage[] sprites) {
+		this.sprites = sprites;
 	}
 
 	@Override
-	public void paint(Graphics2D g2, GameObject gameObject) {
+	public void paint(Graphics2D g2, GameObject gameObject, int frameIndex) {
+
+		// TODO Have a more general way to control the length of time we show a given sprite.
+		int spriteIndex = ((frameIndex / 2) % 2) % sprites.length;
 
 		// FIXME Remove hardcode
 		if (gameObject instanceof EnemyPlane) {
-			paintEnemyPlane(g2, (EnemyPlane) gameObject);
+			paintEnemyPlane(g2, (EnemyPlane) gameObject, spriteIndex);
 			return;
 		}
 
@@ -33,18 +37,17 @@ public class ImageRenderer implements Renderer {
 
 		AffineTransform xform = new AffineTransform();
 		xform.rotate(gameObject.getRotation(), halfWidth, halfHeight);
-
-		g2.drawImage(image, xform, null);
+		g2.drawImage(sprites[spriteIndex], xform, null);
 	}
 
-	private void paintEnemyPlane(Graphics2D g2, EnemyPlane enemyPlane) {
+	private void paintEnemyPlane(Graphics2D g2, EnemyPlane enemyPlane, int spriteIndex) {
 		int halfWidth = enemyPlane.getWidth() / 2;
 		int halfHeight = enemyPlane.getHeight() / 2;
 
 		AffineTransform xform = new AffineTransform();
 		xform.rotate(enemyPlane.getRotation(), halfWidth, halfHeight);
 
-		g2.drawImage(image, xform, null);
+		g2.drawImage(sprites[spriteIndex], xform, null);
 
 		Random random = GameUtil.RANDOM;
 		int stateFlags = enemyPlane.getPlaneState();
