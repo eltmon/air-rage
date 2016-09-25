@@ -1,7 +1,6 @@
 package com.williewheeler.airrage.model;
 
 import com.williewheeler.airrage.Config;
-import com.williewheeler.airrage.GameUtil;
 import com.williewheeler.airrage.event.GameEvent;
 import com.williewheeler.airrage.event.GameListener;
 import com.williewheeler.airrage.model.gameobj.*;
@@ -21,6 +20,7 @@ import java.util.Queue;
 public class GameState {
 	private static final Logger log = LoggerFactory.getLogger(GameState.class);
 
+	private CollisionDetector collisionDetector;
 	private List<GameListener> gameListeners = new LinkedList<>();
 
 	private Player player;
@@ -35,6 +35,8 @@ public class GameState {
 	private int frameIndex;
 
 	public GameState(Level level) {
+		this.collisionDetector = new CollisionDetector(this);
+
 		this.level = level;
 		this.player = new Player(this);
 		this.frameIndex = 0;
@@ -102,63 +104,19 @@ public class GameState {
 	 * Advance the game state forward one frame.
 	 */
 	public void updateState() {
-		checkPlayerHit();
-		checkEnemiesHit();
+		fireTriggers();
+
 		player.updateState(frameIndex);
 		updateAll(playerMissiles);
 		updateAll(enemyPlanes);
 		updateAll(enemyMissiles);
 		updateAll(puffsOfSmoke);
 		updateAll(explosions);
-		fireTriggers();
+
+		collisionDetector.checkPlayerHit();
+		collisionDetector.checkEnemiesHit();
+
 		this.frameIndex = (frameIndex + 1) % Config.TARGET_FPS;
-	}
-
-	private void checkPlayerHit() {
-		ListIterator<EnemyMissile> missileIt = enemyMissiles.listIterator();
-		while (missileIt.hasNext()) {
-			EnemyMissile missile = missileIt.next();
-			boolean collision = Collisions.collision(missile, player);
-			if (collision) {
-				player.setDowned(true);
-			}
-		}
-	}
-
-	private void checkEnemiesHit() {
-		ListIterator<PlayerMissile> missileIt = playerMissiles.listIterator();
-		while (missileIt.hasNext()) {
-			PlayerMissile missile = missileIt.next();
-			ListIterator<EnemyPlane> planeIt = enemyPlanes.listIterator();
-			while (planeIt.hasNext()) {
-				EnemyPlane plane = planeIt.next();
-				boolean collision = Collisions.collision(missile, plane);
-				if (collision) {
-					missileIt.remove();
-					int stateFlags = plane.getStateFlags();
-					stateFlags |= EnemyPlane.STATE_DAMAGED;
-					double d = GameUtil.RANDOM.nextDouble();
-					if (d < 0.05) {
-						stateFlags |= EnemyPlane.STATE_SPINNING;
-					} else if (d < 0.25) {
-						stateFlags |= EnemyPlane.STATE_DESTROYED;
-						plane.setTtl(0);
-
-						// TODO Move this code
-						int numFireballs = GameUtil.RANDOM.nextInt(5) + 5;
-						for (int i = 0; i < numFireballs; i++) {
-							int x = plane.getX() + GameUtil.RANDOM.nextInt(20) - 10;
-							int y = plane.getY() + GameUtil.RANDOM.nextInt(20) - 10;
-							int radius = GameUtil.RANDOM.nextInt(10) + 10;
-							int alpha = GameUtil.RANDOM.nextInt(50) + 150;
-							explosions.add(new Explosion(x, y, radius, alpha));
-						}
-					}
-					plane.setStateFlags(stateFlags);
-					fireGameEvent(new GameEvent(GameEvent.ENEMY_HIT));
-				}
-			}
-		}
 	}
 
 	private <T extends GameObject> void updateAll(List<T> gameObjects) {
