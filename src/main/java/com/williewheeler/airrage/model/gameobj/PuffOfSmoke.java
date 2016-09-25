@@ -1,7 +1,5 @@
 package com.williewheeler.airrage.model.gameobj;
 
-import com.williewheeler.airrage.GameUtil;
-
 /**
  * Created by willie on 9/23/16.
  */
@@ -14,11 +12,11 @@ public class PuffOfSmoke implements GameObject {
 	/** 0-255. 0 is fully transparent */
 	private int alpha;
 
-	public PuffOfSmoke(int x, int y, int radius) {
+	public PuffOfSmoke(int x, int y, int radius, int brightness) {
 		this.x = x;
 		this.y = y;
 		this.radius = radius;
-		this.brightness = GameUtil.RANDOM.nextInt(66) + 40;
+		this.brightness = brightness;
 		this.alpha = 100;
 	}
 

@@ -19,6 +19,7 @@ public class EnemyPlane implements GameObject {
 
 	private static final int SPEED = 2;
 	private static final int FIRE_PERIOD = Config.TARGET_FPS / 3;
+	private static final int PUFF_PERIOD = Config.TARGET_FPS / 15;
 
 	private GameState gameState;
 	private int x;
@@ -101,7 +102,36 @@ public class EnemyPlane implements GameObject {
 		}
 	}
 
+	/**
+	 * This is the update method for undamaged planes.
+	 *
+	 * @param frameIndex
+	 */
 	private void updateStateForUndamagedPlane(int frameIndex) {
+		decideWhetherToFire(frameIndex);
+
+		if (frameIndex % PUFF_PERIOD == 0) {
+			createPuffOfSmoke(1, 255);
+		}
+	}
+
+	/**
+	 * This is the update method for damaged planes.
+	 *
+	 * @param frameIndex
+	 */
+	private void updateStateForDamagedPlane(int frameIndex) {
+		if ((stateFlags & STATE_SPINNING) > 0) {
+			this.rotation += 0.2;
+		}
+
+		if (frameIndex % PUFF_PERIOD == 0) {
+			int brightness = GameUtil.RANDOM.nextInt(66) + 40;
+			createPuffOfSmoke(5, brightness);
+		}
+	}
+
+	private void decideWhetherToFire(int frameIndex) {
 		if (frameIndex % FIRE_PERIOD == 0) {
 			Random random = GameUtil.RANDOM;
 			if (firingMood) {
@@ -120,19 +150,13 @@ public class EnemyPlane implements GameObject {
 		}
 	}
 
-	private void updateStateForDamagedPlane(int frameIndex) {
-		if ((stateFlags & STATE_SPINNING) > 0) {
-			this.rotation += 0.2;
-		}
-
-		if (frameIndex % 5 == 0) {
-			Random random = GameUtil.RANDOM;
-			double adjRot = rotation - Math.PI / 2;
-			int rotX = (int) (x + 10 * Math.cos(adjRot)) + random.nextInt(4) - 2;
-			int rotY = (int) (y + 10 * Math.sin(adjRot)) + random.nextInt(4) - 2;
-			PuffOfSmoke puff = new PuffOfSmoke(rotX, rotY, 5);
-			gameState.addPuffOfSmoke(puff);
-		}
+	private void createPuffOfSmoke(int radius, int brightness) {
+		Random random = GameUtil.RANDOM;
+		double adjRot = rotation + Math.PI / 2;
+		int rotX = (int) (x + 20 * Math.cos(adjRot)) + random.nextInt(4) - 2;
+		int rotY = (int) (y + 20 * Math.sin(adjRot)) + random.nextInt(4) - 2;
+		PuffOfSmoke puff = new PuffOfSmoke(rotX, rotY, radius, brightness);
+		gameState.addPuffOfSmoke(puff);
 	}
 
 	private void fireGuns() {
