@@ -2,7 +2,8 @@ package com.williewheeler.airrage.ui;
 
 import com.williewheeler.airrage.Config;
 import com.williewheeler.airrage.model.GameState;
-import com.williewheeler.airrage.model.gameobj.*;
+import com.williewheeler.airrage.model.gameobj.GameObject;
+import com.williewheeler.airrage.model.gameobj.Player;
 import com.williewheeler.airrage.model.level.Level;
 import com.williewheeler.airrage.model.level.Tiles;
 import com.williewheeler.airrage.ui.renderer.*;
@@ -20,10 +21,11 @@ import static com.williewheeler.airrage.Config.VIEWPORT_SIZE_PX;
 /**
  * Created by willie on 9/4/16.
  */
-public class GamePane extends JComponent {
+public class GamePane extends JPanel {
 	private static final Logger log = LoggerFactory.getLogger(GamePane.class);
 
 	private GameState gameState;
+	private HeadsUpDisplay hud;
 
 	// Tiles
 	private Renderer grassTileRenderer = new TileRenderer(new Color(154, 212, 68));
@@ -39,10 +41,33 @@ public class GamePane extends JComponent {
 
 	public GamePane(GameState gameState) {
 		this.gameState = gameState;
+		this.hud = new HeadsUpDisplay(gameState);
 	}
 
 	@Override
 	public void paint(Graphics g) {
+		Graphics2D g2 = (Graphics2D) g;
+		Player player = gameState.getPlayer();
+		int progressY = player.getProgressY();
+
+		Level level = gameState.getLevel();
+		int[][] gameMap = level.getGameMap();
+
+		// mySize gives us the actual viewport height, not the frame height. (The frame height includes chrome.)
+		Dimension mySize = getSize();
+
+		// Determine view bounds in game coords.
+		int viewYLower = progressY;
+		int viewYUpper = viewYLower + mySize.height + Config.TILE_SIZE_PX.height;
+
+		// Determine corresponding view bounds in tile coords.
+		int tileRowLower = viewYLower / TILE_SIZE_PX.height;
+		int tileRowUpper = viewYUpper / TILE_SIZE_PX.height + 1;
+
+		int viewportX = Math.max(player.getX() + (Player.PLAYER_SIZE_PX.width - mySize.width) / 2, 0);
+		viewportX = Math.min(viewportX, Config.MAP_SIZE_PX.width - mySize.width - 1);
+		g.translate(-viewportX, 0);
+
 		paintTiles(g);
 		paintAll(g, gameState.getEnemyPlanes(), enemyPlaneRenderer);
 		paintPlayer(g);
@@ -51,6 +76,10 @@ public class GamePane extends JComponent {
 		paintAll(g, gameState.getPuffsOfSmoke(), puffOfSmokeRenderer);
 //		log.debug("There are {} explosions", gameState.getExplosions().size());
 		paintAll(g, gameState.getExplosions(), explosionRenderer);
+
+		g.translate(viewportX, 0);
+
+		hud.paint(g);
 	}
 
 	private void paintTiles(Graphics g) {
@@ -74,7 +103,6 @@ public class GamePane extends JComponent {
 
 		int viewportX = Math.max(player.getX() + (Player.PLAYER_SIZE_PX.width - mySize.width) / 2, 0);
 		viewportX = Math.min(viewportX, Config.MAP_SIZE_PX.width - mySize.width - 1);
-		g.translate(-viewportX, 0);
 
 		int tileColLower = viewportX / Config.TILE_SIZE_PX.width;
 		int tileColUpper = tileColLower + mySize.width / Config.TILE_SIZE_PX.width;
