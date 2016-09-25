@@ -14,7 +14,10 @@ public class Formations {
 	public static void battleSpread(GameState gameState) {
 		Player player = gameState.getPlayer();
 		int progressY = player.getProgressY();
-		int topY = progressY + Config.VIEWPORT_SIZE_PX.height;
+
+		// Use an offset to give puffs of smoke time to form
+		final int offset = 200;
+		int topY = progressY + Config.VIEWPORT_SIZE_PX.height + offset;
 
 		gameState.addEnemyPlane(new EnemyPlane(gameState, 300, topY));
 		gameState.addEnemyPlane(new EnemyPlane(gameState, 400, topY));
