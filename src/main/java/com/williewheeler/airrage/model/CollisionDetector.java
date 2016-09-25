@@ -44,13 +44,13 @@ public class CollisionDetector {
 				boolean collision = CollisionDetector.collision(missile, plane);
 				if (collision) {
 					missileIt.remove();
-					int stateFlags = plane.getStateFlags();
-					stateFlags |= EnemyPlane.STATE_DAMAGED;
+					int stateFlags = plane.getPlaneState();
+					stateFlags |= GameObjectStates.STATE_DAMAGED;
 					double d = GameUtil.RANDOM.nextDouble();
 					if (d < 0.05) {
-						stateFlags |= EnemyPlane.STATE_SPINNING;
+						stateFlags |= GameObjectStates.STATE_SPINNING;
 					} else if (d < 0.25) {
-						stateFlags |= EnemyPlane.STATE_DESTROYED;
+						stateFlags |= GameObjectStates.STATE_DESTROYED;
 						plane.setTtl(0);
 
 						// TODO Move this code
@@ -63,7 +63,7 @@ public class CollisionDetector {
 							gameState.addExplosion(new Explosion(x, y, radius, alpha));
 						}
 					}
-					plane.setStateFlags(stateFlags);
+					plane.setPlaneState(stateFlags);
 					gameState.fireGameEvent(new GameEvent(GameEvent.ENEMY_HIT));
 				}
 			}

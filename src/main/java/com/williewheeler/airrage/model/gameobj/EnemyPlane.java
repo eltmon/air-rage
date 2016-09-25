@@ -13,10 +13,6 @@ import java.util.Random;
 public class EnemyPlane implements GameObject {
 	public static final Dimension ENEMY_SIZE_PX = new Dimension(64, 64);
 
-	public static final int STATE_DAMAGED = 1 << 0;
-	public static final int STATE_SPINNING = 1 << 1;
-	public static final int STATE_DESTROYED = 1 << 2;
-
 	private static final int SPEED = 2;
 	private static final int FIRE_PERIOD = Config.TARGET_FPS / 3;
 	private static final int PUFF_PERIOD = Config.TARGET_FPS / 15;
@@ -26,7 +22,7 @@ public class EnemyPlane implements GameObject {
 	private int y;
 
 	/** State flags */
-	private int stateFlags = 0;
+	private int planeState = 0;
 
 	/**
 	 * In radians. 0 degrees is north.
@@ -83,19 +79,19 @@ public class EnemyPlane implements GameObject {
 		this.ttl = ttl;
 	}
 
-	public int getStateFlags() {
-		return stateFlags;
+	public int getPlaneState() {
+		return planeState;
 	}
 
-	public void setStateFlags(int stateFlags) {
-		this.stateFlags = stateFlags;
+	public void setPlaneState(int planeState) {
+		this.planeState = planeState;
 	}
 
 	@Override
 	public void updateState(int frameIndex) {
 		this.y -= SPEED;
 
-		if ((stateFlags & STATE_DAMAGED) == 0) {
+		if ((planeState & GameObjectStates.STATE_DAMAGED) == 0) {
 			updateStateForUndamagedPlane(frameIndex);
 		} else {
 			updateStateForDamagedPlane(frameIndex);
@@ -121,7 +117,7 @@ public class EnemyPlane implements GameObject {
 	 * @param frameIndex
 	 */
 	private void updateStateForDamagedPlane(int frameIndex) {
-		if ((stateFlags & STATE_SPINNING) > 0) {
+		if ((planeState & GameObjectStates.STATE_SPINNING) > 0) {
 			this.rotation += 0.2;
 		}
 

@@ -1,10 +1,12 @@
 package com.williewheeler.airrage.model.gameobj;
 
 import com.williewheeler.airrage.Config;
+import com.williewheeler.airrage.GameUtil;
 import com.williewheeler.airrage.event.GameEvent;
 import com.williewheeler.airrage.model.GameState;
 
 import java.awt.*;
+import java.util.Random;
 
 /**
  * Created by willie on 9/18/16.
@@ -18,10 +20,10 @@ public class Player implements GameObject {
 	private static final int MOVEMENT_SPEED = 5;
 	private static final int MIN_PLAYER_Y_OFFSET = 20;
 	private static final int MAX_PLAYER_Y_OFFSET = 400;
+	private static final int PUFF_PERIOD = Config.TARGET_FPS / 15;
 
 	/** Fire period in frames. */
 	private static final int FIRE_PERIOD = Config.TARGET_FPS / 10;
-//	private static final int FIRE_PERIOD = 1;
 
 	private GameState gameState;
 	private int x;
@@ -31,6 +33,9 @@ public class Player implements GameObject {
 
 	/** This is the micro y */
 	private int yOffset;
+
+	/** State flags */
+	private int planeState = 0;
 
 	private double rotation = 0.0;
 
@@ -115,25 +120,42 @@ public class Player implements GameObject {
 		this.progressY += Player.PROGRESS_SPEED;
 
 		if (downed) {
-			rotation += 0.1;
+			updateStateForDamagedPlayer(frameIndex);
 		} else {
-			if (moveUpIntent) {
-				moveUp();
+			updateStateForUndamagedPlayer(frameIndex);
+		}
+	}
+
+	private void updateStateForUndamagedPlayer(int frameIndex) {
+		if (frameIndex % PUFF_PERIOD == 0) {
+			createPuffOfSmoke(1, 255);
+		}
+
+		if (moveUpIntent) {
+			moveUp();
+		}
+		if (moveDownIntent) {
+			moveDown();
+		}
+		if (moveLeftIntent) {
+			moveLeft();
+		}
+		if (moveRightIntent) {
+			moveRight();
+		}
+		if (fireIntent) {
+			if (frameIndex % FIRE_PERIOD == 0) {
+				fireGuns();
 			}
-			if (moveDownIntent) {
-				moveDown();
-			}
-			if (moveLeftIntent) {
-				moveLeft();
-			}
-			if (moveRightIntent) {
-				moveRight();
-			}
-			if (fireIntent) {
-				if (frameIndex % FIRE_PERIOD == 0) {
-					fireGuns();
-				}
-			}
+		}
+	}
+
+	private void updateStateForDamagedPlayer(int frameIndex) {
+		rotation += 0.1;
+		
+		if (frameIndex % PUFF_PERIOD == 0) {
+			int brightness = GameUtil.RANDOM.nextInt(66) + 40;
+			createPuffOfSmoke(5, brightness);
 		}
 	}
 
@@ -164,6 +186,15 @@ public class Player implements GameObject {
 		if (x > limit) {
 			this.x = limit;
 		}
+	}
+
+	private void createPuffOfSmoke(int radius, int brightness) {
+		Random random = GameUtil.RANDOM;
+		double adjRot = rotation + Math.PI / 2;
+		int rotX = (int) (x + 20 * Math.cos(adjRot)) + random.nextInt(4) - 2;
+		int rotY = (int) (getY() + 20 * Math.sin(adjRot)) + random.nextInt(4) - 2;
+		PuffOfSmoke puff = new PuffOfSmoke(rotX, rotY, radius, brightness);
+		gameState.addPuffOfSmoke(puff);
 	}
 
 	private void fireGuns() {

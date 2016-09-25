@@ -3,6 +3,7 @@ package com.williewheeler.airrage.ui.renderer;
 import com.williewheeler.airrage.GameUtil;
 import com.williewheeler.airrage.model.gameobj.EnemyPlane;
 import com.williewheeler.airrage.model.gameobj.GameObject;
+import com.williewheeler.airrage.model.gameobj.GameObjectStates;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -46,9 +47,9 @@ public class ImageRenderer implements Renderer {
 		g2.drawImage(image, xform, null);
 
 		Random random = GameUtil.RANDOM;
-		int stateFlags = enemyPlane.getStateFlags();
+		int stateFlags = enemyPlane.getPlaneState();
 
-		if ((stateFlags & EnemyPlane.STATE_DAMAGED) > 0) {
+		if ((stateFlags & GameObjectStates.STATE_DAMAGED) > 0) {
 			int numFireballs = random.nextInt(10);
 			for (int i = 0; i < numFireballs; i++) {
 				int x = random.nextInt(enemyPlane.getWidth());
