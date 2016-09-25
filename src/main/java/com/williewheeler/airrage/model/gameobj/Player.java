@@ -152,7 +152,7 @@ public class Player implements GameObject {
 
 	private void updateStateForDamagedPlayer(int frameIndex) {
 		rotation += 0.1;
-		
+
 		if (frameIndex % PUFF_PERIOD == 0) {
 			int brightness = GameUtil.RANDOM.nextInt(66) + 40;
 			createPuffOfSmoke(5, brightness);
@@ -174,17 +174,18 @@ public class Player implements GameObject {
 	}
 
 	private void moveLeft() {
+		final int lowerBound = PLAYER_SIZE_PX.width / 2;
 		this.x -= MOVEMENT_SPEED;
-		if (x < 0) {
-			this.x = 0;
+		if (x < lowerBound) {
+			this.x = lowerBound;
 		}
 	}
 
 	private void moveRight() {
+		final int upperBound = Config.MAP_SIZE_PX.width - PLAYER_SIZE_PX.width / 2 - 1;
 		this.x += MOVEMENT_SPEED;
-		int limit = Config.MAP_SIZE_PX.width - PLAYER_SIZE_PX.width - 1;
-		if (x > limit) {
-			this.x = limit;
+		if (x > upperBound) {
+			this.x = upperBound;
 		}
 	}
 
