@@ -10,7 +10,19 @@ import java.awt.*;
  */
 public class HeadsUpDisplay {
 	private static final Dimension MY_SIZE = new Dimension(Config.VIEWPORT_SIZE_PX.width, 32);
-	private static final Dimension HEALTH_METER_SIZE = new Dimension(134, 26);
+
+	private static final int HEALTH_METER_NUM_CELLS = 10;
+	private static final int HEALTH_METER_CELL_WIDTH = 6;
+	private static final int HEALTH_METER_CELL_HEIGHT = 12;
+	private static final int HEALTH_METER_BORDER = 2;
+	private static final int HEALTH_METER_GAP = 2;
+
+	private static final int HEALTH_METER_WIDTH =
+			2 * HEALTH_METER_BORDER + HEALTH_METER_GAP + HEALTH_METER_NUM_CELLS * (HEALTH_METER_CELL_WIDTH + HEALTH_METER_GAP);
+
+	private static final int HEALTH_METER_HEIGHT =
+			2 * HEALTH_METER_BORDER + 2 * HEALTH_METER_GAP + HEALTH_METER_CELL_HEIGHT;
+
 	private static final Color BG_COLOR = new Color(0, 0, 0, 150);
 
 	private GameState gameState;
@@ -30,21 +42,34 @@ public class HeadsUpDisplay {
 	}
 
 	private void paintHealthMeter(Graphics g) {
-		int shiftX = (MY_SIZE.width - HEALTH_METER_SIZE.width - 10);
-		int shiftY = ((MY_SIZE.height - HEALTH_METER_SIZE.height) / 2);
+		final int shiftX = (MY_SIZE.width - HEALTH_METER_WIDTH - 10);
+		final int shiftY = ((MY_SIZE.height - HEALTH_METER_HEIGHT) / 2);
+		final int borderPlusGap = HEALTH_METER_BORDER + HEALTH_METER_GAP;
 
 		g.translate(shiftX, shiftY);
 
 		g.setColor(Color.LIGHT_GRAY);
-		g.fillRect(0, 0, HEALTH_METER_SIZE.width, HEALTH_METER_SIZE.height);
+		g.fillRect(0, 0, HEALTH_METER_WIDTH, HEALTH_METER_HEIGHT);
 
 		g.setColor(Color.BLACK);
-		g.fillRect(2, 2, HEALTH_METER_SIZE.width - 4, HEALTH_METER_SIZE.height - 4);
+		g.fillRect(HEALTH_METER_BORDER, HEALTH_METER_BORDER, HEALTH_METER_WIDTH - borderPlusGap, HEALTH_METER_HEIGHT - borderPlusGap);
 
 		// TODO
-		g.setColor(Color.GREEN);
-		for (int i = 0; i < 8; i++) {
-			g.fillRect(4 + i * 16, 4, 14, HEALTH_METER_SIZE.height - 8);
+		for (int i = 0; i < HEALTH_METER_NUM_CELLS; i++) {
+			Color cellColor;
+			double percentage = (i + 1) / (double) HEALTH_METER_NUM_CELLS;
+			if (percentage <= 0.31) {
+				cellColor = Color.RED;
+			} else if (percentage <= 0.71) {
+				cellColor = Color.YELLOW;
+			} else {
+				cellColor = Color.GREEN;
+			}
+			g.setColor(cellColor);
+
+			final int x = borderPlusGap + i * (HEALTH_METER_CELL_WIDTH + HEALTH_METER_GAP);
+			final int y = borderPlusGap;
+			g.fillRect(x, y, HEALTH_METER_CELL_WIDTH, HEALTH_METER_CELL_HEIGHT);
 		}
 
 		g.translate(-shiftX, -shiftY);
