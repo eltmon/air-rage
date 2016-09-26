@@ -77,9 +77,9 @@ public class CollisionDetector {
 
 	private void addFireballs(GameObject gameObject, int numFireballs) {
 		for (int i = 0; i < numFireballs; i++) {
-			int x = gameObject.getX() + GameUtil.RANDOM.nextInt(20) - 10;
-			int y = gameObject.getY() + GameUtil.RANDOM.nextInt(20) - 10;
-			int radius = GameUtil.RANDOM.nextInt(10) + 10;
+			int x = gameObject.getX() + GameUtil.RANDOM.nextInt(30) - 15;
+			int y = gameObject.getY() + GameUtil.RANDOM.nextInt(30) - 15;
+			int radius = GameUtil.RANDOM.nextInt(15) + 10;
 			int alpha = GameUtil.RANDOM.nextInt(50) + 150;
 			gameState.addExplosion(new Explosion(x, y, radius, alpha));
 		}
