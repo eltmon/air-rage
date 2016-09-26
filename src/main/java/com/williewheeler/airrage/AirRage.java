@@ -57,7 +57,7 @@ public class AirRage extends JFrame {
 	}
 
 	private void startGameLoop() {
-		GameUtil.sleep(15000);
+//		GameUtil.sleep(15000);
 
 		// TODO Figure out how to make this continuous
 		audioManager.playSoundEffect("airplane+spita", true);
