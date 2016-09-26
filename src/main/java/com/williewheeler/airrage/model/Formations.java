@@ -96,4 +96,16 @@ public class Formations {
 		gameState.addEnemyPlane(new EnemyPlane(gameState, 600, topY));
 		gameState.addEnemyPlane(new EnemyPlane(gameState, 600, topY + 160));
 	}
+
+	public static void vic(GameState gameState) {
+		Player player = gameState.getPlayer();
+		int progressY = player.getProgressY();
+		int topY = progressY + Config.VIEWPORT_SIZE_PX.height;
+
+		gameState.addEnemyPlane(new EnemyPlane(gameState, 300, topY + 160));
+		gameState.addEnemyPlane(new EnemyPlane(gameState, 400, topY + 80));
+		gameState.addEnemyPlane(new EnemyPlane(gameState, 500, topY));
+		gameState.addEnemyPlane(new EnemyPlane(gameState, 600, topY + 80));
+		gameState.addEnemyPlane(new EnemyPlane(gameState, 700, topY + 160));
+	}
 }

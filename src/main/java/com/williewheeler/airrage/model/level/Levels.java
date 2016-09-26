@@ -30,7 +30,21 @@ public class Levels {
 		level.addTrigger(new ProgressTrigger(200) {
 			@Override
 			public void fireTrigger(GameState gameState) {
-				Formations.fingerFour(gameState);
+				Formations.vic(gameState);
+			}
+		});
+
+		level.addTrigger(new ProgressTrigger(320) {
+			@Override
+			public void fireTrigger(GameState gameState) {
+				Formations.vic(gameState);
+			}
+		});
+
+		level.addTrigger(new ProgressTrigger(440) {
+			@Override
+			public void fireTrigger(GameState gameState) {
+				Formations.vic(gameState);
 			}
 		});
 
