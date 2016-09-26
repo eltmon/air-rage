@@ -194,10 +194,14 @@ public class Player implements GameObject {
 
 	private void createPuffOfSmoke(int radius, int brightness) {
 		Random random = GameUtil.RANDOM;
-		double adjRot = rotation + Math.PI / 2;
-		int rotX = (int) (x + 20 * Math.cos(adjRot)) + random.nextInt(4) - 2;
-		int rotY = (int) (getY() + 20 * Math.sin(adjRot)) + random.nextInt(4) - 2;
-		PuffOfSmoke puff = new PuffOfSmoke(rotX, rotY, radius, brightness);
+		double adjRot = -rotation + Math.PI / 2;
+		int noiseX = random.nextInt(4) - 2;
+		int noiseY = random.nextInt(4) - 2;
+		int engineX = (int) (20 * Math.cos(adjRot));
+		int engineY = (int) (20 * Math.sin(adjRot));
+		int puffX = x + engineX + noiseX;
+		int puffY = getY() + engineY + noiseY;
+		PuffOfSmoke puff = new PuffOfSmoke(puffX, puffY, radius, brightness);
 		gameState.addPuffOfSmoke(puff);
 	}
 

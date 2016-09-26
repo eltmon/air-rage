@@ -51,7 +51,7 @@ public class CollisionDetector {
 					int stateFlags = plane.getPlaneState();
 					stateFlags |= GameObjectStates.STATE_DAMAGED;
 					double d = GameUtil.RANDOM.nextDouble();
-					if (d < 0.05) {
+					if (d < 0.10) {
 						stateFlags |= GameObjectStates.STATE_SPINNING;
 					} else if (d < 0.25) {
 						stateFlags |= GameObjectStates.STATE_DESTROYED;

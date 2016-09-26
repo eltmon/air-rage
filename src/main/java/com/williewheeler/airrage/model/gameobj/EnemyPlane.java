@@ -118,7 +118,7 @@ public class EnemyPlane implements GameObject {
 	 */
 	private void updateStateForDamagedPlane(int frameIndex) {
 		if ((planeState & GameObjectStates.STATE_SPINNING) > 0) {
-			this.rotation += 0.2;
+			this.rotation += 0.1;
 		}
 
 		if (frameIndex % PUFF_PERIOD == 0) {
@@ -148,10 +148,14 @@ public class EnemyPlane implements GameObject {
 
 	private void createPuffOfSmoke(int radius, int brightness) {
 		Random random = GameUtil.RANDOM;
-		double adjRot = rotation + Math.PI / 2;
-		int rotX = (int) (x + 20 * Math.cos(adjRot)) + random.nextInt(4) - 2;
-		int rotY = (int) (y + 20 * Math.sin(adjRot)) + random.nextInt(4) - 2;
-		PuffOfSmoke puff = new PuffOfSmoke(rotX, rotY, radius, brightness);
+		double adjRot = -rotation + Math.PI / 2;
+		int noiseX = random.nextInt(4) - 2;
+		int noiseY = random.nextInt(4) - 2;
+		int engineX = (int) (20 * Math.cos(adjRot));
+		int engineY = (int) (20 * Math.sin(adjRot));
+		int puffX = x + engineX + noiseX;
+		int puffY = y + engineY + noiseY;
+		PuffOfSmoke puff = new PuffOfSmoke(puffX, puffY, radius, brightness);
 		gameState.addPuffOfSmoke(puff);
 	}
 
