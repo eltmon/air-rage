@@ -24,6 +24,7 @@ public class GameState {
 	private Player player;
 	private Level level;
 	private int frameIndex;
+	private boolean cloudy;
 
 	private final List<PlayerMissile> playerMissiles = new LinkedList<>();
 	private final List<EnemyPlane> enemyPlanes = new LinkedList<>();
@@ -54,6 +55,14 @@ public class GameState {
 
 	public int getFrameIndex() {
 		return frameIndex;
+	}
+
+	public boolean isCloudy() {
+		return cloudy;
+	}
+
+	public void setCloudy(boolean cloudy) {
+		this.cloudy = cloudy;
 	}
 
 	public List<EnemyPlane> getEnemyPlanes() {
@@ -140,7 +149,6 @@ public class GameState {
 	}
 
 	private void addClouds() {
-		boolean cloudy = player.getProgressY() > 1200 && player.getProgressY() < 2800;
 		double prCloud = (cloudy ? 0.05 : 0.001);
 
 		Random random = GameUtil.RANDOM;
@@ -158,8 +166,8 @@ public class GameState {
 				int x = anchorX + offsetX;
 				int y = anchorY + offsetY;
 				int ttl = 1500;
-				int radius = 5 * altitude * (random.nextInt(7) + 3);
-				int speed = random.nextInt(altitude * 3) + 1;
+				int radius = 5 * (7 - altitude) * (random.nextInt(6) + 3);
+				int speed = random.nextInt(altitude * 4) + 1;
 				addCloud(new Cloud(x, y, ttl, radius, speed));
 			}
 		}

@@ -41,6 +41,14 @@ public class Levels {
 			}
 		});
 
+		// FIXME Should allow two triggers at the same y.
+		level.addTrigger(new ProgressTrigger(750) {
+			@Override
+			public void fireTrigger(GameState gameState) {
+				gameState.setCloudy(true);
+			}
+		});
+
 		level.addTrigger(new ProgressTrigger(1200) {
 			@Override
 			public void fireTrigger(GameState gameState) {
@@ -62,6 +70,13 @@ public class Levels {
 			}
 		});
 
+		level.addTrigger(new ProgressTrigger(2300) {
+			@Override
+			public void fireTrigger(GameState gameState) {
+				gameState.setCloudy(false);
+			}
+		});
+
 		level.addTrigger(new ProgressTrigger(2700) {
 			@Override
 			public void fireTrigger(GameState gameState) {
@@ -73,6 +88,13 @@ public class Levels {
 			@Override
 			public void fireTrigger(GameState gameState) {
 				Formations.box(gameState);
+			}
+		});
+
+		level.addTrigger(new ProgressTrigger(3800) {
+			@Override
+			public void fireTrigger(GameState gameState) {
+				Formations.fingerFour(gameState);
 			}
 		});
 
