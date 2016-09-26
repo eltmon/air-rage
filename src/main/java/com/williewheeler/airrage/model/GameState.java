@@ -140,23 +140,26 @@ public class GameState {
 	}
 
 	private void addClouds() {
+		boolean cloudy = player.getProgressY() > 1200 && player.getProgressY() < 2800;
+		double prCloud = (cloudy ? 0.05 : 0.001);
+
 		Random random = GameUtil.RANDOM;
-		if (random.nextDouble() < 0.003) {
+		if (random.nextDouble() < prCloud) {
 
-			// 1 = low, 5 = high
-			int altitude = random.nextInt(5) + 1;
+			// 2 = low, 5 = high
+			int altitude = random.nextInt(4) + 2;
 
-			int anchorX = random.nextInt(Config.VIEWPORT_SIZE_PX.width);
-			int anchorY = player.getProgressY() + 2000;
-			int numPuffs = random.nextInt(10) + 15;
+			int anchorX = random.nextInt(Config.MAP_SIZE_PX.width);
+			int anchorY = player.getProgressY() + 1500;
+			int numPuffs = random.nextInt(20) + 10;
 			for (int i = 0; i < numPuffs; i++) {
-				int offsetX = altitude * (random.nextInt(40) - 20);
-				int offsetY = altitude * (random.nextInt(20) - 10);
+				int offsetX = altitude * (random.nextInt(50) - 25);
+				int offsetY = altitude * (random.nextInt(30) - 15);
 				int x = anchorX + offsetX;
 				int y = anchorY + offsetY;
 				int ttl = 1500;
-				int radius = 2 * altitude * (random.nextInt(7) + 3);
-				int speed = random.nextInt(altitude * 2) + 2;
+				int radius = 5 * altitude * (random.nextInt(7) + 3);
+				int speed = random.nextInt(altitude * 3) + 1;
 				addCloud(new Cloud(x, y, ttl, radius, speed));
 			}
 		}

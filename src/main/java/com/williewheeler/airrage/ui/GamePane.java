@@ -28,8 +28,8 @@ public class GamePane extends JPanel {
 	private HeadsUpDisplay hud;
 
 	// Tiles
-	private Renderer grassTileRenderer = new TileRenderer(new Color(154, 212, 68));
-	private Renderer seaTileRenderer = new TileRenderer(new Color(42, 135, 181));
+	private Renderer grassTileRenderer = new TileRenderer(new Color(120, 155, 68));
+	private Renderer seaTileRenderer = new TileRenderer(new Color(42, 105, 131));
 
 	// Game objects
 	private Renderer playerRenderer = new ImageRenderer(Sprites.A6M_ZERO);
