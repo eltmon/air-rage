@@ -116,6 +116,16 @@ public class Player implements GameObject {
 		// external to the player.
 		this.progressY += Player.PROGRESS_SPEED;
 
+		if (frameIndex % PUFF_PERIOD == 0) {
+			if (health <= 3) {
+				createPuffOfSmoke(5, 0);
+			} else if (health <= 7) {
+				createPuffOfSmoke(5, 66);
+			} else {
+				createPuffOfSmoke(1, 255);
+			}
+		}
+
 		if (health > 0) {
 			updateStateForLivingPlayer(frameIndex);
 		} else {
@@ -124,10 +134,6 @@ public class Player implements GameObject {
 	}
 
 	private void updateStateForLivingPlayer(int frameIndex) {
-		if (frameIndex % PUFF_PERIOD == 0) {
-			createPuffOfSmoke(1, 255);
-		}
-
 		if (moveUpIntent) {
 			moveUp();
 		}
