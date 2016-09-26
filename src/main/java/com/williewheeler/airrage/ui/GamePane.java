@@ -38,6 +38,7 @@ public class GamePane extends JPanel {
 	private Renderer enemyMissileRenderer = new MissileRenderer(Color.BLUE, Color.WHITE);
 	private Renderer puffOfSmokeRenderer = new PuffOfSmokeRenderer();
 	private Renderer explosionRenderer = new ExplosionRenderer();
+	private Renderer cloudRenderer = new CloudRenderer();
 
 	public GamePane(GameState gameState) {
 		this.gameState = gameState;
@@ -69,6 +70,7 @@ public class GamePane extends JPanel {
 		g.translate(-viewportX, 0);
 
 		paintTiles(g);
+		paintAll(g, gameState.getClouds(), cloudRenderer);
 		paintAll(g, gameState.getEnemyPlanes(), enemyPlaneRenderer);
 		paintPlayer(g);
 		paintAll(g, gameState.getEnemyMissiles(), enemyMissileRenderer);

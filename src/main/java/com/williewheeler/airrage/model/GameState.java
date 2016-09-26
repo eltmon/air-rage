@@ -1,6 +1,7 @@
 package com.williewheeler.airrage.model;
 
 import com.williewheeler.airrage.Config;
+import com.williewheeler.airrage.GameUtil;
 import com.williewheeler.airrage.event.GameEvent;
 import com.williewheeler.airrage.event.GameListener;
 import com.williewheeler.airrage.model.gameobj.*;
@@ -9,10 +10,7 @@ import com.williewheeler.airrage.model.trigger.Trigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * Created by willie on 9/11/16.
@@ -32,6 +30,7 @@ public class GameState {
 	private final List<EnemyMissile> enemyMissiles = new LinkedList<>();
 	private final List<PuffOfSmoke> puffsOfSmoke = new LinkedList<>();
 	private final List<Explosion> explosions = new LinkedList<>();
+	private final List<Cloud> clouds = new LinkedList<>();
 
 	public GameState(Level level) {
 		this.collisionDetector = new CollisionDetector(this);
@@ -97,6 +96,14 @@ public class GameState {
 		explosions.add(explosion);
 	}
 
+	public List<Cloud> getClouds() {
+		return clouds;
+	}
+
+	public void addCloud(Cloud cloud) {
+		clouds.add(cloud);
+	}
+
 	public void fireGameEvent(GameEvent event) {
 		for (GameListener listener : gameListeners) {
 			listener.handleGameEvent(event);
@@ -108,6 +115,7 @@ public class GameState {
 	 */
 	public void updateState() {
 		fireTriggers();
+		addClouds();
 
 		player.updateState(frameIndex);
 		updateAll(playerMissiles);
@@ -115,11 +123,43 @@ public class GameState {
 		updateAll(enemyMissiles);
 		updateAll(puffsOfSmoke);
 		updateAll(explosions);
+		updateAll(clouds);
 
 		collisionDetector.checkPlayerHit();
 		collisionDetector.checkEnemiesHit();
 
 		this.frameIndex = (frameIndex + 1) % Config.TARGET_FPS;
+	}
+
+	private void fireTriggers() {
+		Queue<Trigger> triggers = level.getTriggers();
+		if (triggers.peek() != null && triggers.peek().canFire(this)) {
+			Trigger trigger = triggers.poll();
+			trigger.fireTrigger(this);
+		}
+	}
+
+	private void addClouds() {
+		Random random = GameUtil.RANDOM;
+		if (random.nextDouble() < 0.003) {
+
+			// 1 = low, 5 = high
+			int altitude = random.nextInt(5) + 1;
+
+			int anchorX = random.nextInt(Config.VIEWPORT_SIZE_PX.width);
+			int anchorY = player.getProgressY() + 2000;
+			int numPuffs = random.nextInt(10) + 15;
+			for (int i = 0; i < numPuffs; i++) {
+				int offsetX = altitude * (random.nextInt(40) - 20);
+				int offsetY = altitude * (random.nextInt(20) - 10);
+				int x = anchorX + offsetX;
+				int y = anchorY + offsetY;
+				int ttl = 1500;
+				int radius = 2 * altitude * (random.nextInt(7) + 3);
+				int speed = random.nextInt(altitude * 2) + 2;
+				addCloud(new Cloud(x, y, ttl, radius, speed));
+			}
+		}
 	}
 
 	private <T extends GameObject> void updateAll(List<T> gameObjects) {
@@ -132,14 +172,6 @@ public class GameState {
 			if (gameObject.getTtl() == 0) {
 				it.remove();
 			}
-		}
-	}
-
-	private void fireTriggers() {
-		Queue<Trigger> triggers = level.getTriggers();
-		if (triggers.peek() != null && triggers.peek().canFire(this)) {
-			Trigger trigger = triggers.poll();
-			trigger.fireTrigger(this);
 		}
 	}
 }
